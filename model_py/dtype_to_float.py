@@ -1,7 +1,7 @@
 def binary_to_float(binary_str):
     """Convert a 32-bit binary string to a float."""
     sign = int(binary_str[0])
-    integer_part = int(binary_str[1:4], 2)
+    integer_part = int(binary_str[1:5], 2)
     fractional_part = binary_str[5:]
     frac_value = 0.0
     for i, bit in enumerate(fractional_part):
@@ -13,7 +13,7 @@ def binary_to_float(binary_str):
     return float_value
 
 # Input from the user
-user_input = input("Please enter a binary0 value: ")
+user_input = input("Please enter a binary value: ")
 
 float_data = binary_to_float(user_input)
 print(f"Custom binary representation: {float_data:.10f}")
