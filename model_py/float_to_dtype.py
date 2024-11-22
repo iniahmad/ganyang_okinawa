@@ -10,7 +10,7 @@ def float_to_custom_binary(float_value):
     fractional_part = abs_value - integer_part
 
     # Convert the integer part to binary (4 bits)
-    integer_binary = format(integer_part, '04b')
+    integer_binary = format(integer_part & 0b1111, '04b')
 
     # Convert the fractional part to binary (26 bits)
     fractional_binary = ''
