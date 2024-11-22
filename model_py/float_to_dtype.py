@@ -34,3 +34,7 @@ try:
     print("Custom binary representation:", custom_binary)
 except ValueError:
     print("Invalid input. Please enter a valid float value.")
+
+sigmoid_opt_x = [-4.09263072, -1.81172374 , 1.81171603 , 4.09261913]
+for s in sigmoid_opt_x:
+    print(float_to_custom_binary(s))
