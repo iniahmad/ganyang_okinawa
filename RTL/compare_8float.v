@@ -58,13 +58,13 @@ module compare_8float (
 
     // Generate flags for region checks
     assign flag[0] = compare_sign_mag(data_sign, x1_sign, data_mag, x1_mag); // Region 1
-    assign flag[1] = ~flag[0] && compare_sign_mag(data_sign, x2_sign, data_mag, x2_mag); // Region 2
-    assign flag[2] = ~flag[0] && ~flag[1] && compare_sign_mag(data_sign, x3_sign, data_mag, x3_mag); // Region 3
-    assign flag[3] = ~flag[0] && ~flag[1] && ~flag[2] && compare_sign_mag(data_sign, x4_sign, data_mag, x4_mag); // Region 4
-    assign flag[4] = ~flag[0] && ~flag[1] && ~flag[2] && ~flag[3] && compare_sign_mag(data_sign, x5_sign, data_mag, x5_mag); // Region 5
-    assign flag[5] = ~flag[0] && ~flag[1] && ~flag[2] && ~flag[3] && ~flag[4] && compare_sign_mag(data_sign, x6_sign, data_mag, x6_mag); // Region 6
-    assign flag[6] = ~flag[0] && ~flag[1] && ~flag[2] && ~flag[3] && ~flag[4] && ~flag[5] && compare_sign_mag(data_sign, x7_sign, data_mag, x7_mag); // Region 7
-    assign flag[7] = ~flag[0] && ~flag[1] && ~flag[2] && ~flag[3] && ~flag[4] && ~flag[5] && ~flag[6] && compare_sign_mag(data_sign, x8_sign, data_mag, x8_mag); // Region 8
+    assign flag[1] = compare_sign_mag(data_sign, x2_sign, data_mag, x2_mag); // Region 2
+    assign flag[2] = compare_sign_mag(data_sign, x3_sign, data_mag, x3_mag); // Region 3
+    assign flag[3] = compare_sign_mag(data_sign, x4_sign, data_mag, x4_mag); // Region 4
+    assign flag[4] = compare_sign_mag(data_sign, x5_sign, data_mag, x5_mag); // Region 5
+    assign flag[5] = compare_sign_mag(data_sign, x6_sign, data_mag, x6_mag); // Region 6
+    assign flag[6] = compare_sign_mag(data_sign, x7_sign, data_mag, x7_mag); // Region 7
+    assign flag[7] = compare_sign_mag(data_sign, x8_sign, data_mag, x8_mag); // Region 8
 
     // Determine m and c based on flag
     always @(*) begin
