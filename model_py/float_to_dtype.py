@@ -12,9 +12,9 @@ def float_to_custom_binary(float_value):
     # Convert the integer part to binary (4 bits)
     integer_binary = format(integer_part & 0b1111, '04b')
 
-    # Convert the fractional part to binary (26 bits)
+    # Convert the fractional part to binary (27 bits)
     fractional_binary = ''
-    for _ in range(26):
+    for _ in range(27):
         fractional_part *= 2
         bit = int(fractional_part)
         fractional_binary += str(bit)
