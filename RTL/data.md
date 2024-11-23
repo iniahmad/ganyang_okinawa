@@ -1,4 +1,5 @@
 nitip buat biar data nya sama. nnti dibawah tambahin yg 8 slice juga
+tulung masukin sisanya :D
 
 untuk 4 slice:
 x1 berapa
@@ -8,3 +9,33 @@ x4 berapa
 
 untuk 4 slice sigmoid:
 terus turus masing2 itung y1, y2, y3, y4, terus cari m sama c
+
+
+sigmoid 4 Slice:
+```verilog
+// input x1, x2, x3, x4
+reg signed [31:0] x1 = 32'b10011011001010010110010000001010;
+reg signed [31:0] x2 = 32'b10001100111010101011101010001011;
+reg signed [31:0] x3 = 32'b00001100111010101011100000100100;
+reg signed [31:0] x4 = 32'b00011011001010010110110100101000;
+
+// input m1, m2, m3, m4, m5
+// input c1, c2, c3, c4, c5
+reg signed [31:0] m1 = 32'b00000000000011100100011111110111;
+reg signed [31:0] c1 = 32'b00000000011100101110111110001111;
+
+reg signed [31:0] m2 = 32'b00000000100110011000110101111001;
+reg signed [31:0] c2 = 32'b00000010010010111100101010110101;
+
+reg signed [31:0] m3 = 32'b00000001101001111011011100100100;
+reg signed [31:0] c3 = 32'b00000100000000000000000000010101;
+
+reg signed [31:0] m4 = 32'b00000000100110011000110101010101;
+reg signed [31:0] c4 = 32'b00000101101101000011010101011011;
+
+reg signed [31:0] m5 = 32'b00000000000011100100011111101011;
+reg signed [31:0] c5 = 32'b00000111100011010001000011010100;
+```
+
+
+
