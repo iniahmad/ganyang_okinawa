@@ -1,5 +1,6 @@
 `include "compare_4float.v"
 `include "fixed_point_multiply.v"
+`include "fixed_point_add.v"
 
 
 module sigmoid_4slice (
@@ -9,28 +10,28 @@ module sigmoid_4slice (
 
 
 // inisiasi value langsung untuk memperkecil perhitungan m tuh dari ((y2-y1)/(x2-x1)), c tuh (y1 - m*x1)
-wire m1 [31:0]; // value m1 untuk membuat garis 1
-wire c1 [31:0]; // value c1 untuk membuat garis 1
+reg [31:0] m1 = 32'b00000000000011100100011111110111; // value m1 untuk membuat garis 1
+reg [31:0] c1 = 32'b00000000011100101110111110001111; // value c1 untuk membuat garis 1
 
-wire m2 [31:0]; // value m1 untuk membuat garis 1
-wire c2 [31:0]; // value c1 untuk membuat garis 1
+reg [31:0] m2 = 32'b00000000100110011000110101111001; // value m1 untuk membuat garis 2
+reg [31:0] c2 = 32'b00000010010010111100101010110101; // value c1 untuk membuat garis 2
 
-wire m3 [31:0]; // value m1 untuk membuat garis 1
-wire c3 [31:0]; // value c1 untuk membuat garis 1
+reg [31:0] m3 = 32'b00000001101001111011011100100100; // value m1 untuk membuat garis 3
+reg [31:0] c3 = 32'b00000100000000000000000000010101; // value c1 untuk membuat garis 3
 
-wire m4 [31:0]; // value m1 untuk membuat garis 1
-wire c4 [31:0]; // value c1 untuk membuat garis 1
+reg [31:0] m4 = 32'b00000000100110011000110101010101; // value m1 untuk membuat garis 4
+reg [31:0] c4 = 32'b00000101101101000011010101011011; // value c1 untuk membuat garis 4
 
-wire m5 [31:0]; // value m1 untuk membuat garis 1
-wire c5 [31:0]; // value c1 untuk membuat garis 1
+reg [31:0] m5 = 32'b00000000000011100100011111101011; // value m1 untuk membuat garis 5
+reg [31:0] c5 = 32'b00000111100011010001000011010100; // value c1 untuk membuat garis 5
 
-wire x1 [31:0];
-wire x2 [31:0];
-wire x3 [31:0];
-wire x4 [31:0];
+reg [31:0] x1 = 32'b10011011001010010110010000001010;
+reg [31:0] x2 = 32'b10001100111010101011101010001011;
+reg [31:0] x3 = 32'b00001100111010101011100000100100;
+reg [31:0] x4 = 32'b00011011001010010110110100101000;
 
-wire m_out [31:0];
-wire c_out [31:0];
+wire [31:0] m_out;
+wire [31:0] c_out;
 
 // custom mux
 compare_4float custom_mux (
@@ -49,8 +50,8 @@ compare_4float custom_mux (
     .c3    (c3),
     .c4    (c4),
     .c5    (c5),
-    .m_out (m),
-    .c_out (c)
+    .m     (m_out),
+    .c     (c_out)
 );
 
 
@@ -59,12 +60,16 @@ compare_4float custom_mux (
 wire [31:0] out_mul;
 
 fixed_point_multiply custom_mul (
-    .data_in  (A),
-    .m_out    (B),
-    .out_mul  (C)
+    .A (data_in),
+    .B (m_out),
+    .C (out_mul)
 );
 
-// penjumlahan
-assign data_out = out_mul + c_out;
+//penjumlahan
+fixed_point_add custom_add (
+    .A (out_mul),
+    .B (c_out),
+    .C (data_out)
+);
 
 endmodule
