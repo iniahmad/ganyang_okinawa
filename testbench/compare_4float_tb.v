@@ -1,4 +1,4 @@
-`include "../RTL/compare_4float.v"
+`include "compare_4float.v"
 module compare_4float_tb;
 
 reg signed [31:0] data_in;
@@ -49,7 +49,10 @@ compare_4float custom_mux (
 
 initial begin
     // Test case: input a signed number
-    data_in = 32'b1_0011_000000000000000000000000000; // -3 in fixed-point
+    data_in = 32'b1_0100_000000000000000000000000000; // -3 in fixed-point
+    $display("data_in = %b", data_in);
+    $display("x1 = %b", x1);
+    
     #5;
     $display("output m = %b, c = %b", m_out, c_out);
     $finish;
