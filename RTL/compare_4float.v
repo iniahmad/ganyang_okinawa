@@ -46,9 +46,9 @@ module compare_4float (
 
     // Generate flags for region checks
     assign flag[0] = compare_sign_mag(data_sign, x1_sign, data_mag, x1_mag); // Region 1
-    assign flag[1] = ~flag[0] && compare_sign_mag(data_sign, x2_sign, data_mag, x2_mag); // Region 2
-    assign flag[2] = ~flag[0] && ~flag[1] && compare_sign_mag(data_sign, x3_sign, data_mag, x3_mag); // Region 3
-    assign flag[3] = ~flag[0] && ~flag[1] && ~flag[2] && compare_sign_mag(data_sign, x4_sign, data_mag, x4_mag); // Region 4
+    assign flag[1] = compare_sign_mag(data_sign, x2_sign, data_mag, x2_mag); // Region 2
+    assign flag[2] = compare_sign_mag(data_sign, x3_sign, data_mag, x3_mag); // Region 3
+    assign flag[3] = compare_sign_mag(data_sign, x4_sign, data_mag, x4_mag); // Region 4
 
     // Determine m and c based on flag
     always @(*) begin
