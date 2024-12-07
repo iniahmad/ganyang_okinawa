@@ -1,4 +1,3 @@
-
 `include "encoder_fixed_point.v"
 
 `timescale 1ns / 1ps
@@ -44,10 +43,10 @@ module encoder_fixed_point_tb;
         };
 
         w = {
-            32'b0_00010_0000000000000000000001010, // w[35] = 2.00000A
-            32'b0_00001_0000000000000000000001011, // w[34] = 1.00000B
-            32'b0_00011_0000000000000000000001100, // ...
-            32'b0_00000_0000000000000000000001101,
+            32'b0_00010_0000000000000000000001010, // w[35] = 2.00000A //
+            32'b0_00001_0000000000000000000001011, // w[34] = 1.00000B //
+            32'b0_00011_0000000000000000000001100, // ... 
+            32'b0_00000_0000000000000000000001101, // 
             32'b1_11111_0000000000000000000001110,
             32'b1_11110_0000000000000000000001111,
             32'b1_11101_0000000000000000000010000,
@@ -90,17 +89,21 @@ module encoder_fixed_point_tb;
         };
 
         // Wait for simulation
-        #1000;
+        #100;
 
-        // Display outputs
-        $display("Output values:");
-        $display("out[0] = %b", out[31:0]);
-        $display("out[1] = %b", out[63:32]);
-        $display("out[2] = %b", out[95:64]);
-        $display("out[3] = %b", out[127:96]);
-
-        // End simulation
         $stop;
+        end
+
+        integer i;
+        initial begin
+            for (i = 0; i < M_output; i = i + 1) begin
+                #1;
+                $display("Output[%0d] in Hex: %h, in Binary: %b", i, out[(i+1)*BITSIZE-1 -: BITSIZE], out[(i+1)*BITSIZE-1 -: BITSIZE]);
+            end
+
+        
+        // End simulation
+        $finish;
 
     end
 endmodule
