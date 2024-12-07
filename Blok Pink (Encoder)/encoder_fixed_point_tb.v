@@ -1,5 +1,4 @@
-`include "fixed_point_multiply.v" // Custom multiplier module
-`include "fixed_point_add.v"      // Custom adder module
+
 `include "encoder_fixed_point.v"
 
 `timescale 1ns / 1ps
