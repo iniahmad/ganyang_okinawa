@@ -9,9 +9,7 @@ module encoder_fixed_point #(
     input wire [N_input*BITSIZE-1:0] x,           // Input data
     input wire [N_input*M_output*BITSIZE-1:0] w, // Weights
     input wire [M_output*BITSIZE-1:0] b,         // Bias
-    output wire [M_output*BITSIZE-1:0] out,      // Output data
-    input wire clk,                              // Clock
-    input wire rst                               // Reset
+    output wire [M_output*BITSIZE-1:0] out      // Output data
 );
 
     // Internal wires for intermediate results
