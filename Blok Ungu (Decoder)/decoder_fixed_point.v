@@ -13,10 +13,10 @@ module decoder_fixed_point #(
 );
 
     // Internal wires for results
-    wire [BITSIZE-1:0] mult_result [0:N_input-1][0:M_output-1];    // Hasil perkalian
+    wire [BITSIZE-1:0] mult_result [0:N_input-1][0:M_output-1];      // Hasil perkalian
     wire [BITSIZE-1:0] sum_result [0:M_output-1];                    // Penjumlahan hasil perkalian setelah digabungkan semuanya
     wire [BITSIZE-1:0] final_result [0:M_output-1];                  // Hasil akhir setelah ditambahkan bias
-    wire [BITSIZE-1:0] tree_sum_result [0:M_output-1];              // Hasil adder tree untuk setiap output
+    wire [BITSIZE-1:0] tree_sum_result [0:M_output-1];               // Hasil adder tree untuk setiap output
 
     genvar i, j, k;
 
@@ -25,9 +25,9 @@ module decoder_fixed_point #(
         for (i = 0; i < N_input; i = i + 1) begin : gen_z
             for (j = 0; j < M_output; j = j + 1) begin : gen_w
                 fixed_point_multiply mult_inst (
-                    .A(z[(i+1)*BITSIZE-1:i*BITSIZE]),   // Input z
+                    .A(z[(i+1)*BITSIZE-1:i*BITSIZE]),                             // Input z
                     .B(w[(j*N_input + i + 1)*BITSIZE-1:(j*N_input + i)*BITSIZE]), // Weight w
-                    .C(mult_result[i][j])                // Hasil perkalian
+                    .C(mult_result[i][j])                                         // Hasil perkalian
                 );
             end
         end
@@ -73,12 +73,12 @@ module decoder_fixed_point #(
                 end
             end
 
-            // Use the last level's result
+            // Final Result dari Summation
             assign tree_sum_result[j] = (N_input >= 8) ? level3_sum[0] : (N_input >= 4) ? level2_sum[0] : level1_sum[0];
         end
     endgenerate
 
-    // Add Bias in Parallel
+    // Penjumlahan Bias Paralel
     generate
         for (j = 0; j < M_output; j = j + 1) begin : gen_bias
             fixed_point_add adder_bias (
