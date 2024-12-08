@@ -1,13 +1,15 @@
-`timescale 1ns/1ps
+`include "top_vae.v"
 
 module top_vae_tb;
 
     // Parameter definitions
-    parameter N_input_enc = 9;    // Input size of encoder
-    parameter M_output_enc = 4;  // Output size of encoder
-    parameter N_input_dec = 2;   // Input size of decoder (latent space)
-    parameter M_output_dec = 9;  // Output size of decoder
-    parameter BITSIZE = 32;      // Fixed Point 32-bit
+    parameter N_input_enc = 9;       // Input size of encoder
+    parameter M_output_enc = 4;      // Output size of encoder
+    parameter N_input_sampling = 2;  // Input sampling dari output enc dibagi 2
+    parameter M_output_sampling = 2; // besar input output sama
+    parameter N_input_dec = 2;       // Input size of decoder (latent space)
+    parameter M_output_dec = 9;      // Output size of decoder
+    parameter BITSIZE = 32;           // Fixed Point 32-bit
 
     // Testbench signals
     reg rst;
@@ -33,36 +35,36 @@ module top_vae_tb;
 
     // Task to initialize inputs
     task initialize_inputs;
-        integer j;
+        // integer j;
         begin
             // Initialize tb_x with manual values
-        tb_x[0*BITSIZE +: BITSIZE] = 32'b00001000000000000000000000000000;  // Manual input for tb_x[0]
-        tb_x[1*BITSIZE +: BITSIZE] = 32'b00001000000000000000000000000000;  // Manual input for tb_x[1]
-        tb_x[2*BITSIZE +: BITSIZE] = 32'b00001000000000000000000000000000;  // Manual input for tb_x[2]
-        tb_x[3*BITSIZE +: BITSIZE] = 32'b00001000000000000000000000000000;  // Manual input for tb_x[3]
-        tb_x[4*BITSIZE +: BITSIZE] = 32'b00000000000000000000000000000000;  // Manual input for tb_x[4]
-        tb_x[5*BITSIZE +: BITSIZE] = 32'b00001000000000000000000000000000;  // Manual input for tb_x[5]
-        tb_x[6*BITSIZE +: BITSIZE] = 32'b00001000000000000000000000000000;  // Manual input for tb_x[6]
-        tb_x[7*BITSIZE +: BITSIZE] = 32'b00001000000000000000000000000000;  // Manual input for tb_x[7]
-        tb_x[8*BITSIZE +: BITSIZE] = 32'b00001000000000000000000000000000;  // Manual input for tb_x[8]
+        // tb_x[0*BITSIZE +: BITSIZE] = 32'b0_0001_000000000000000000000000000;  // Manual input for tb_x[0]
+        // tb_x[1*BITSIZE +: BITSIZE] = 32'b0_0001_000000000000000000000000000;  // Manual input for tb_x[1]
+        // tb_x[2*BITSIZE +: BITSIZE] = 32'b0_0001_000000000000000000000000000;  // Manual input for tb_x[2]
+        // tb_x[3*BITSIZE +: BITSIZE] = 32'b0_0001_000000000000000000000000000;  // Manual input for tb_x[3]
+        // tb_x[4*BITSIZE +: BITSIZE] = 32'b0_0000_000000000000000000000000000;  // Manual input for tb_x[4]
+        // tb_x[5*BITSIZE +: BITSIZE] = 32'b0_0001_000000000000000000000000000;  // Manual input for tb_x[5]
+        // tb_x[6*BITSIZE +: BITSIZE] = 32'b0_0001_000000000000000000000000000;  // Manual input for tb_x[6]
+        // tb_x[7*BITSIZE +: BITSIZE] = 32'b0_0001_000000000000000000000000000;  // Manual input for tb_x[7]
+        // tb_x[8*BITSIZE +: BITSIZE] = 32'b0_0001_000000000000000000000000000;  // Manual input for tb_x[8]
         
-//        tb_x[0*BITSIZE +: BITSIZE] = 32'b00001000000000000000000000000000;  // Manual input for tb_x[0]
-//        tb_x[1*BITSIZE +: BITSIZE] = 32'b00000000000000000000000000000000;  // Manual input for tb_x[1]
-//        tb_x[2*BITSIZE +: BITSIZE] = 32'b00001000000000000000000000000000;  // Manual input for tb_x[2]
-//        tb_x[3*BITSIZE +: BITSIZE] = 32'b00000000000000000000000000000000;  // Manual input for tb_x[3]
-//        tb_x[4*BITSIZE +: BITSIZE] = 32'b00001000000000000000000000000000;  // Manual input for tb_x[4]
-//        tb_x[5*BITSIZE +: BITSIZE] = 32'b00000000000000000000000000000000;  // Manual input for tb_x[5]
-//        tb_x[6*BITSIZE +: BITSIZE] = 32'b00001000000000000000000000000000;  // Manual input for tb_x[6]
-//        tb_x[7*BITSIZE +: BITSIZE] = 32'b00000000000000000000000000000000;  // Manual input for tb_x[7]
-//        tb_x[8*BITSIZE +: BITSIZE] = 32'b00001000000000000000000000000000;  // Manual input for tb_x[8]
+        tb_x[0*BITSIZE +: BITSIZE] = 32'b0_0001_000000000000000000000000000;  // Manual input for tb_x[0]
+        tb_x[1*BITSIZE +: BITSIZE] = 32'b0_0000_000000000000000000000000000;  // Manual input for tb_x[1]
+        tb_x[2*BITSIZE +: BITSIZE] = 32'b0_0001_000000000000000000000000000;  // Manual input for tb_x[2]
+        tb_x[3*BITSIZE +: BITSIZE] = 32'b0_0000_000000000000000000000000000;  // Manual input for tb_x[3]
+        tb_x[4*BITSIZE +: BITSIZE] = 32'b0_0001_000000000000000000000000000;  // Manual input for tb_x[4]
+        tb_x[5*BITSIZE +: BITSIZE] = 32'b0_0000_000000000000000000000000000;  // Manual input for tb_x[5]
+        tb_x[6*BITSIZE +: BITSIZE] = 32'b0_0001_000000000000000000000000000;  // Manual input for tb_x[6]
+        tb_x[7*BITSIZE +: BITSIZE] = 32'b0_0000_000000000000000000000000000;  // Manual input for tb_x[7]
+        tb_x[8*BITSIZE +: BITSIZE] = 32'b0_0001_000000000000000000000000000;  // Manual input for tb_x[8]
 
-        // Optional: Display initialized values for debugging
-        $display("tb_x manually initialized:");
-        for (j = 0; j < N_input_enc; j = j + 1) begin
-            $display("tb_x[%0d]: %0d", j, tb_x[j*BITSIZE +: BITSIZE]);
-        end
+        // // Optional: Display initialized values for debugging
+        // $display("tb_x manually initialized:");
+        // for (j = 0; j < N_input_enc; j = j + 1) begin
+        //     $display("tb_x[%0d]: %0d", j, tb_x[j*BITSIZE +: BITSIZE]);
+        // end
         
-        #10; // Wait for some time after initialization
+        // #10; // Wait for some time after initialization
         end
     endtask
 
@@ -76,15 +78,21 @@ module top_vae_tb;
         end
     endtask
 
+    integer j;
     // Testbench stimulus
     initial begin
         // Initialize signals
+        rst = 1'b1;
         $display("Initializing inputs...");
         initialize_inputs();
+        rst = 1'b0;
 
         // Display inputs
-        $display("Inputs Initialized:");
-        $display("tb_x: %h", tb_x);
+        $display("Inputs Initialized as tb_x");
+        $display("tb_x manually initialized:");
+        for (j = 0; j < N_input_enc; j = j + 1) begin
+            $display("tb_x[%0d]: %0d", j, tb_x[j*BITSIZE +: BITSIZE]);
+        end
 
         // Simulate for some time to observe outputs
         #10;
@@ -96,7 +104,7 @@ module top_vae_tb;
         $display("Outputs:");
         $display("tb_sigmoid_out: %h", tb_sigmoid_out);
         for (i = 0; i < M_output_dec; i = i + 1) begin
-            $display("sigmoid_out_split[%0d]: %h", i, sigmoid_out_split[i]);
+            $display("sigmoid_out_split[%0d]: %b", i, sigmoid_out_split[i]);
         end
     
         #10
