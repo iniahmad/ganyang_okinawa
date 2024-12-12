@@ -1,0 +1,90 @@
+#! /c/Source/iverilog-install/bin/vvp
+:ivl_version "12.0 (devel)" "(s20150603-1539-g2693dd32b)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "D:\iverilog\lib\ivl\system.vpi";
+:vpi_module "D:\iverilog\lib\ivl\vhdl_sys.vpi";
+:vpi_module "D:\iverilog\lib\ivl\vhdl_textio.vpi";
+:vpi_module "D:\iverilog\lib\ivl\v2005_math.vpi";
+:vpi_module "D:\iverilog\lib\ivl\va_math.vpi";
+S_000001d921b66650 .scope module, "fixed_point_multiply_tb" "fixed_point_multiply_tb" 2 3;
+ .timescale 0 0;
+P_000001d921b65880 .param/l "BITSIZE" 0 2 5, +C4<00000000000000000000000000010000>;
+v000001d921bc6100_0 .var "A", 15 0;
+v000001d921bc64c0_0 .var "B", 15 0;
+v000001d921bc67e0_0 .net "C", 15 0, L_000001d921bc6b00;  1 drivers
+S_000001d921b2e1e0 .scope module, "uut" "fixed_point_multiply" 2 13, 3 1 0, S_000001d921b66650;
+ .timescale 0 0;
+    .port_info 0 /INPUT 16 "A";
+    .port_info 1 /INPUT 16 "B";
+    .port_info 2 /OUTPUT 16 "C";
+P_000001d921b65900 .param/l "BITSIZE" 0 3 1, +C4<00000000000000000000000000010000>;
+L_000001d921b7c6a0 .functor XOR 1, L_000001d921bc6600, L_000001d921bc69c0, C4<0>, C4<0>;
+v000001d921b430b0_0 .net "A", 15 0, v000001d921bc6100_0;  1 drivers
+v000001d921b42ee0_0 .net "B", 15 0, v000001d921bc64c0_0;  1 drivers
+v000001d921b29620_0 .net "C", 15 0, L_000001d921bc6b00;  alias, 1 drivers
+L_000001d921bc7028 .functor BUFT 1, C4<000000000000000>, C4<0>, C4<0>, C4<0>;
+v000001d921b29460_0 .net *"_ivl_11", 14 0, L_000001d921bc7028;  1 drivers
+v000001d921b28a90_0 .net *"_ivl_12", 29 0, L_000001d921bc6740;  1 drivers
+L_000001d921bc7070 .functor BUFT 1, C4<000000000000000>, C4<0>, C4<0>, C4<0>;
+v000001d921b667e0_0 .net *"_ivl_15", 14 0, L_000001d921bc7070;  1 drivers
+v000001d921b66880_0 .net *"_ivl_23", 14 0, L_000001d921bc6880;  1 drivers
+v000001d921bc6ce0_0 .net *"_ivl_8", 29 0, L_000001d921bc6a60;  1 drivers
+v000001d921bc6060_0 .net "mag_A", 14 0, L_000001d921bc6560;  1 drivers
+v000001d921bc62e0_0 .net "mag_B", 14 0, L_000001d921bc6e20;  1 drivers
+v000001d921bc66a0_0 .net "normalized_product", 15 0, L_000001d921bc6420;  1 drivers
+v000001d921bc6920_0 .net "product_unsigned", 29 0, L_000001d921bc61a0;  1 drivers
+v000001d921bc6d80_0 .net "result_sign", 0 0, L_000001d921b7c6a0;  1 drivers
+v000001d921bc6240_0 .net "sign_A", 0 0, L_000001d921bc6600;  1 drivers
+v000001d921bc6380_0 .net "sign_B", 0 0, L_000001d921bc69c0;  1 drivers
+L_000001d921bc6600 .part v000001d921bc6100_0, 15, 1;
+L_000001d921bc69c0 .part v000001d921bc64c0_0, 15, 1;
+L_000001d921bc6560 .part v000001d921bc6100_0, 0, 15;
+L_000001d921bc6e20 .part v000001d921bc64c0_0, 0, 15;
+L_000001d921bc6a60 .concat [ 15 15 0 0], L_000001d921bc6560, L_000001d921bc7028;
+L_000001d921bc6740 .concat [ 15 15 0 0], L_000001d921bc6e20, L_000001d921bc7070;
+L_000001d921bc61a0 .arith/mult 30, L_000001d921bc6a60, L_000001d921bc6740;
+L_000001d921bc6420 .part L_000001d921bc61a0, 11, 16;
+L_000001d921bc6880 .part L_000001d921bc6420, 0, 15;
+L_000001d921bc6b00 .concat [ 15 1 0 0], L_000001d921bc6880, L_000001d921b7c6a0;
+    .scope S_000001d921b66650;
+T_0 ;
+    %pushi/vec4 256, 0, 16;
+    %store/vec4 v000001d921bc6100_0, 0, 16;
+    %pushi/vec4 256, 0, 16;
+    %store/vec4 v000001d921bc64c0_0, 0, 16;
+    %delay 10, 0;
+    %vpi_call 2 25 "$display", "Test 1: A=%b, B=%b, C=%b", v000001d921bc6100_0, v000001d921bc64c0_0, v000001d921bc67e0_0 {0 0 0};
+    %pushi/vec4 16640, 0, 16;
+    %store/vec4 v000001d921bc6100_0, 0, 16;
+    %pushi/vec4 33024, 0, 16;
+    %store/vec4 v000001d921bc64c0_0, 0, 16;
+    %delay 10, 0;
+    %vpi_call 2 31 "$display", "Test 2: A=%b, B=%b, C=%b", v000001d921bc6100_0, v000001d921bc64c0_0, v000001d921bc67e0_0 {0 0 0};
+    %pushi/vec4 49408, 0, 16;
+    %store/vec4 v000001d921bc6100_0, 0, 16;
+    %pushi/vec4 33024, 0, 16;
+    %store/vec4 v000001d921bc64c0_0, 0, 16;
+    %delay 10, 0;
+    %vpi_call 2 37 "$display", "Test 3: A=%b, B=%b, C=%b", v000001d921bc6100_0, v000001d921bc64c0_0, v000001d921bc67e0_0 {0 0 0};
+    %pushi/vec4 0, 0, 16;
+    %store/vec4 v000001d921bc6100_0, 0, 16;
+    %pushi/vec4 256, 0, 16;
+    %store/vec4 v000001d921bc64c0_0, 0, 16;
+    %delay 10, 0;
+    %vpi_call 2 43 "$display", "Test 4: A=%b, B=%b, C=%b", v000001d921bc6100_0, v000001d921bc64c0_0, v000001d921bc67e0_0 {0 0 0};
+    %pushi/vec4 0, 0, 16;
+    %store/vec4 v000001d921bc6100_0, 0, 16;
+    %pushi/vec4 0, 0, 16;
+    %store/vec4 v000001d921bc64c0_0, 0, 16;
+    %delay 10, 0;
+    %vpi_call 2 49 "$display", "Test 5: A=%b, B=%b, C=%b", v000001d921bc6100_0, v000001d921bc64c0_0, v000001d921bc67e0_0 {0 0 0};
+    %vpi_call 2 52 "$finish" {0 0 0};
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "fixed_point_multiply_tb.v";
+    "./fixed_point_multiply.v";
