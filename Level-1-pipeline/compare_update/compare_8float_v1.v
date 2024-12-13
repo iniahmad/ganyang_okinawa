@@ -1,44 +1,48 @@
+// v1 cuman 1 section jadi ngga ada pemisah dan output disimpen lgsg saat 1 kali clk
+
 module compare_8float (
-    input wire [31:0] data, x1, x2, x3, x4, x5, x6, x7, x8, // Sign-magnitude inputs
-    input wire [31:0] m1, m2, m3, m4, m5, m6, m7, m8, m9,
-    input wire [31:0] c1, c2, c3, c4, c5, c6, c7, c8, c9,
-    output reg [31:0] m, c
+    input wire [15:0] data, x1, x2, x3, x4, x5, x6, x7, x8, // Sign-magnitude inputs
+    input wire [15:0] m1, m2, m3, m4, m5, m6, m7, m8, m9,
+    input wire [15:0] c1, c2, c3, c4, c5, c6, c7, c8, c9,
+    input wire clk,
+    input wire reset,
+    output reg [15:0] m, c
 );
 
     wire [7:0] flag;
 
     // Split the inputs into sign and magnitude
-    wire data_sign = data[31];
-    wire [30:0] data_mag = data[30:0];
+    wire data_sign = data[15];
+    wire [14:0] data_mag = data[14:0];
     
-    wire x1_sign = x1[31];
-    wire [30:0] x1_mag = x1[30:0];
+    wire x1_sign = x1[15];
+    wire [14:0] x1_mag = x1[14:0];
 
-    wire x2_sign = x2[31];
-    wire [30:0] x2_mag = x2[30:0];
+    wire x2_sign = x2[15];
+    wire [14:0] x2_mag = x2[14:0];
 
-    wire x3_sign = x3[31];
-    wire [30:0] x3_mag = x3[30:0];
+    wire x3_sign = x3[15];
+    wire [14:0] x3_mag = x3[14:0];
 
-    wire x4_sign = x4[31];
-    wire [30:0] x4_mag = x4[30:0];
+    wire x4_sign = x4[15];
+    wire [14:0] x4_mag = x4[14:0];
 
-    wire x5_sign = x5[31];
-    wire [30:0] x5_mag = x5[30:0];
+    wire x5_sign = x5[15];
+    wire [14:0] x5_mag = x5[14:0];
 
-    wire x6_sign = x6[31];
-    wire [30:0] x6_mag = x6[30:0];
+    wire x6_sign = x6[15];
+    wire [14:0] x6_mag = x6[14:0];
 
-    wire x7_sign = x7[31];
-    wire [30:0] x7_mag = x7[30:0];
+    wire x7_sign = x7[15];
+    wire [14:0] x7_mag = x7[14:0];
 
-    wire x8_sign = x8[31];
-    wire [30:0] x8_mag = x8[30:0];
+    wire x8_sign = x8[15];
+    wire [14:0] x8_mag = x8[14:0];
 
     // Helper function to compare sign-magnitude numbers
     function compare_sign_mag;
         input sign_a, sign_b;
-        input [30:0] mag_a, mag_b;
+        input [14:0] mag_a, mag_b;
         begin
             if (sign_a != sign_b) begin
                 // If signs differ, the negative number is smaller
@@ -67,8 +71,11 @@ module compare_8float (
     assign flag[7] = compare_sign_mag(data_sign, x8_sign, data_mag, x8_mag); // Region 8
 
     // Determine m and c based on flag
-    always @(*) begin           // ->> maksimum critical path 4 if else
-        if (flag[3])
+    always @(posedge clk or posedge reset) begin           // ->> maksimum critical path 4 if else
+        if (reset) begin
+            m = 16'h0000;
+            c = 16'h0000;
+        end else if (flag[3])
             if (flag[1])
                 if (flag[0])
                     begin

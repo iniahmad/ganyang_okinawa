@@ -17,7 +17,7 @@ def float_to_custom_binary(float_value):
 
     # Convert the fractional part to binary (27 bits)
     fractional_binary = ''
-    for _ in range(27):
+    for _ in range(11):
         fractional_part *= 2
         bit = int(fractional_part)
         fractional_binary += str(bit)
@@ -29,9 +29,9 @@ def float_to_custom_binary(float_value):
     return custom_binary
 
 # Data arrays
-w2 = np.array([-0.0033, 0.0026, -0.0035, 0.0025, -0.0044, 0.0029, 0.4614, 0.1543, 0.2542,
-               -0.9801, 0.2782, -0.9518, -0.5551, -0.2942, -0.4738, -1.2922, -0.3987, -1.2404,
-               -0.0002, -0.0032, 0.0009, -0.0028, 0.0057, -0.0038, -0.1973, 1.2975, 0.4131,
+w2 = np.array([-0.0033,  0.0026, -0.0035,  0.0025, -0.0044,  0.0029,  0.4614,  0.1543,  0.2542,
+               -0.9801,  0.2782, -0.9518, -0.5551, -0.2942, -0.4738, -1.2922, -0.3987, -1.2404,
+               -0.0002, -0.0032,  0.0009, -0.0028,  0.0057, -0.0038, -0.1973,  1.2975,  0.4131,
                -1.0131, -0.0954, -0.5927, -0.5650, -0.0613, -0.4846, -1.6800, -0.1214, -0.7809])
 
 b2 = np.array([-0.6678, -1.8547, -0.8391, -2.2616])
@@ -39,23 +39,75 @@ b2 = np.array([-0.6678, -1.8547, -0.8391, -2.2616])
 w3 = np.array([2.9018, -0.0947, 1.0031, 5.8119, 2.9684, -0.1314, 1.2482, 5.7844,
                -0.0283, -5.8888, 1.2856, 5.7943, 2.8900, -0.1277, 1.0408, 5.8097,
                2.8919, -0.1222])
+# w3 = np.array([   
+#     2.9018,   
+#     1.0031,   
+#     2.9684,   
+#     1.2482,   
+#    -0.0283,   
+#     1.2856,   
+#     2.8900,   
+#     1.0408,   
+#     2.8919, 
+#    -0.0947,
+#     5.8119,
+#    -0.1314,
+#     5.7844,
+#    -5.8888,
+#     5.7943,
+#    -0.1277,
+#     5.8097,
+#    -0.1222])  
 
 b3 = np.array([4.2917, -0.3433, 4.2707, -0.3862, 0.1678, -0.3960, 4.2877, -0.3504, 4.2880])
+
+buat_epsilon = np.array([
+0,
+0.111111111,
+0.111111111,
+0.222222222,
+0.222222222,
+0.222222222,
+0.333333333,
+0.333333333,
+0.333333333,
+0.333333333,
+0.444444444,
+0.444444444,
+0.444444444,
+0.444444444,
+0.444444444,
+0.555555556,
+0.555555556,
+0.555555556,
+0.555555556,
+0.555555556,
+0.666666667,
+0.666666667,
+0.666666667,
+0.666666667,
+0.777777778,
+0.777777778,
+0.777777778,
+0.888888889,
+0.888888889,
+1])
+
 
 # Function to apply the conversion to all elements in an array
 def convert_array_to_custom_binary(data_array):
     return [float_to_custom_binary(value) for value in data_array]
 
-# Convert the arrays
-w2_custom = convert_array_to_custom_binary(w2)
-b2_custom = convert_array_to_custom_binary(b2)
-w3_custom = convert_array_to_custom_binary(w3)
-b3_custom = convert_array_to_custom_binary(b3)
+# # Convert the arrays
+# w2_custom = convert_array_to_custom_binary(w2)
+# b2_custom = convert_array_to_custom_binary(b2)
+# w3_custom = convert_array_to_custom_binary(w3)
+# b3_custom = convert_array_to_custom_binary(b3)
 
 # Custom function to print the binary data
 def custom_print(label, data):
-    print(f"{label}:")
-    print("\n".join(data))
+    print(f"{label} = ")
+    print("32'b\n".join(data))
 
 # Convert the arrays
 w2_custom = convert_array_to_custom_binary(w2)
@@ -63,8 +115,10 @@ b2_custom = convert_array_to_custom_binary(b2)
 w3_custom = convert_array_to_custom_binary(w3)
 b3_custom = convert_array_to_custom_binary(b3)
 
-# Custom printing for each dataset
-custom_print("w2_custom", w2_custom)
-custom_print("b2_custom", b2_custom)
-custom_print("w3_custom", w3_custom)
-custom_print("b3_custom", b3_custom)
+# # Custom printing for each dataset
+# custom_print("w2_custom", w2_custom)
+# custom_print("b2_custom", b2_custom)
+# custom_print("w3_custom", w3_custom)
+# custom_print("b3_custom", b3_custom)
+
+custom_print("buat epsilon", convert_array_to_custom_binary(buat_epsilon))

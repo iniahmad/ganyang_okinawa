@@ -1,12 +1,15 @@
+// v2 ada 2 section jadi kaya 2 pipe
+
 module compare_8float (
     input wire [31:0] data, x1, x2, x3, x4, x5, x6, x7, x8, // Sign-magnitude inputs
     input wire [31:0] m1, m2, m3, m4, m5, m6, m7, m8, m9,
     input wire [31:0] c1, c2, c3, c4, c5, c6, c7, c8, c9,
-    input wire clk;
+    input wire clk,
+    input wire reset,
     output reg [31:0] m, c
 );
 
-    wire [7:0] flag;
+    reg [7:0] flag;
 
     // Split the inputs into sign and magnitude
     wire data_sign = data[31];
@@ -70,8 +73,11 @@ module compare_8float (
     end
 
     // Determine m and c based on flag
-    always @(posedge clk) begin           // ->> maksimum critical path 4 if else
-        if (flag[3])
+    always @(posedge clk or posedge reset) begin           // ->> maksimum critical path 4 if else
+        if (reset) begin
+            m = 16'h0000;
+            c = 16'h0000;
+        end else if (flag[3])
             if (flag[1])
                 if (flag[0])
                     begin
