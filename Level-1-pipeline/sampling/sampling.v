@@ -125,8 +125,7 @@ endgenerate
 
 // Ambil nilai epsilon
 wire [BITSIZE-1:0] e[0:N_input-1];
-wire [4:0] state;
-reg  [4:0] seed;
+reg [4:0] seed = 5'b11010;
 
 // GENERATE EPSILON (PRNG OUTPUT)
 generate
@@ -136,8 +135,7 @@ generate
             .random_out(e[i]),
             .clk(clk),
             .rst(rst),
-            .seed(seed),
-            .statee(state)
+            .seed(seed)
         );
 
         assign epsilon[(i+1)*BITSIZE-1:i*BITSIZE] = e[i];
