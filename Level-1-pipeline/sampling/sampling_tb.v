@@ -13,7 +13,6 @@ module sampling_VAE_tb;
     reg rst;
     reg [N_input*BITSIZE-1:0] ac;
     reg [N_input*BITSIZE-1:0] ad;
-    reg [4:0] seed = 5'b11010;
     wire [M_output*BITSIZE-1:0] a;
     wire [N_input*BITSIZE-1:0] epsilon;
 
@@ -26,6 +25,7 @@ module sampling_VAE_tb;
         .clk(clk),
         .rst(rst),
         .ac(ac),
+        .ad(ad),
         .a(a),
         .epsilon(epsilon)
     );
@@ -95,7 +95,7 @@ module sampling_VAE_tb;
         ac[15:0], ac[31:16],          // Display `ac` as ac[0] and ac[1]
         ad[15:0], ad[31:16],          // Display `ad` as ad[0] and ad[1]
         a[15:0], a[31:16],            // Display `a` as a[0] and a[1]
-        epsilon[15:0] // Display `epsilon` as epsilon[0] and epsilon[1]
+        epsilon[15:0]                 // Display `epsilon`
     );
     end
 
