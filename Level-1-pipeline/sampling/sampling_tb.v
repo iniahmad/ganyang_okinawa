@@ -13,7 +13,7 @@ module sampling_VAE_tb;
     reg rst;
     reg [N_input*BITSIZE-1:0] ac;
     reg [N_input*BITSIZE-1:0] ad;
-    reg [4:0] seed;
+    reg [4:0] seed = 5'b01001;
     wire [M_output*BITSIZE-1:0] a;
     wire [N_input*BITSIZE-1:0] epsilon;
 
@@ -67,7 +67,6 @@ module sampling_VAE_tb;
             16'b0000011100001010, // ad2 = 0.88 (MSB)
             16'b0001000100001010  // ad1 = 2.13 (LSB)
         };
-        seed = 5'b01001;
 
         // Run for some time to observe the outputs
         #200;
@@ -83,7 +82,6 @@ module sampling_VAE_tb;
             16'b0010101010100011, // ad2 = 5.33 (MSB)
             16'b0011011111101011  // ad1 = 6.99 (LSB)
         };
-        seed = 5'b01001;
 
         #200;
 
@@ -93,7 +91,14 @@ module sampling_VAE_tb;
 
     // Monitor outputs
     initial begin
-        $monitor("Time = %0t | ac = %h | ad = %h | a = %h | epsilon = %h", $time, ac, ad, a, epsilon);
+        $monitor(
+        "Time = %0t | ac = %b %b | ad = %b %b | a[0] = %b | a[1] = %b | epsilon = %b",
+        $time, 
+        ac[15:0], ac[31:16],          // Display `ac` as ac[0] and ac[1]
+        ad[15:0], ad[31:16],          // Display `ad` as ad[0] and ad[1]
+        a[15:0], a[31:16],            // Display `a` as a[0] and a[1]
+        epsilon[15:0] // Display `epsilon` as epsilon[0] and epsilon[1]
+    );
     end
 
 endmodule
