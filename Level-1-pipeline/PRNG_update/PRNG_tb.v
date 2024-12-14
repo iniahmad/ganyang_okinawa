@@ -1,3 +1,5 @@
+// oh btw ini testbench nya maap lupa
+
 `include "PRNG.v"
 
 module unique_output_counter(
@@ -62,11 +64,12 @@ endmodule
 
 
 module PRNG_tb;
-    reg [4:0] seed = 5'b01001;
+    reg [4:0] seed = 5'b11010;
     reg clk;
     reg reset;
     wire [15:0] output_val;
     wire [31:0] count_0, count_1, count_2, count_3, count_4, count_5, count_6, count_7, count_8, count_9;
+    wire [4:0]state;
 
     // Instantiate the module
     unique_output_counter uut (
@@ -87,9 +90,10 @@ module PRNG_tb;
 
     PRNG uut2 (
         .clk(clk),
-        .rst(reset),          // Reset signal
         .seed(seed),  // -> 4 hex, 15 11 7 3
-        .random_out(output_val) // Random number output
+        .random_out(output_val), // Random number output
+        .rst(reset),
+        .statee(state)
     );
 
     // Clock generation
@@ -97,9 +101,15 @@ module PRNG_tb;
 
     initial begin
         clk = 0;
-        reset = 0;
-        #10 reset = 1;
-        #10 reset = 0;
+        // reset = 0;
+        // #10 reset = 1;
+        // #10 reset = 0;
+
+        repeat (33) begin
+            #10; // Wait for one clock cycle
+            $display("State: %b, Random Output: %b", state, output_val);
+        end
+
         #320
         // // Stimulus: Provide some outputs
         // output_val = 16'h0001; #10; // Increment count_0
@@ -113,17 +123,17 @@ module PRNG_tb;
         // output_val = 16'h0008; #10; // Increment count_3 again
 
         // Print the results
-        $display("Counts:");
-        $display("Value 0 (%d): %d", 16'b0000000000000000, count_0);
-        $display("Value 1 (%d): %d", 16'b0000000011100011, count_1);
-        $display("Value 2 (%d): %d", 16'b0000000111000111, count_2);
-        $display("Value 3 (%d): %d", 16'b0000001010101010, count_3);
-        $display("Value 4 (%d): %d", 16'b0000001110001110, count_4);
-        $display("Value 5 (%d): %d", 16'b0000010001110001, count_5);
-        $display("Value 6 (%d): %d", 16'b0000010101010101, count_6);
-        $display("Value 7 (%d): %d", 16'b0000011000111000, count_7);
-        $display("Value 8 (%d): %d", 16'b0000011100011100, count_8);
-        $display("Value 9 (%d): %d", 16'b0000100000000000, count_9);
+        // $display("Counts:");
+        // $display("Value 0 (%d): %d", 16'b0000000000000000, count_0);
+        // $display("Value 1 (%d): %d", 16'b0000000011100011, count_1);
+        // $display("Value 2 (%d): %d", 16'b0000000111000111, count_2);
+        // $display("Value 3 (%d): %d", 16'b0000001010101010, count_3);
+        // $display("Value 4 (%d): %d", 16'b0000001110001110, count_4);
+        // $display("Value 5 (%d): %d", 16'b0000010001110001, count_5);
+        // $display("Value 6 (%d): %d", 16'b0000010101010101, count_6);
+        // $display("Value 7 (%d): %d", 16'b0000011000111000, count_7);
+        // $display("Value 8 (%d): %d", 16'b0000011100011100, count_8);
+        // $display("Value 9 (%d): %d", 16'b0000100000000000, count_9);
 
         $finish; // End simulation
     end
