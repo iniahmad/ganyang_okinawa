@@ -1,4 +1,5 @@
 ![image](https://github.com/user-attachments/assets/29c9b2be-08a3-470a-9f1e-7cb9ddb3c4ca)
+Dari input menuju output membutuhkan 5 clock cycle
 
 Beritahukan saya kalau ada yang perlu diperbaiki
 
