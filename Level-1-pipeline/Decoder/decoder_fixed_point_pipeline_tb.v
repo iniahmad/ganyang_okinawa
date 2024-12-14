@@ -9,6 +9,7 @@ module decoder_fixed_point_pipeline_tb;
 
     // Port untuk Modul Decoder
     reg clk;                                          
+    reg rst;                                          // Reset
     reg signed [N_input*BITSIZE-1:0] z;               // Input
     reg signed [N_input*M_output*BITSIZE-1:0] w;      // Weight
     reg signed [M_output*BITSIZE-1:0] b;              // Bias
@@ -24,6 +25,7 @@ module decoder_fixed_point_pipeline_tb;
     decoder_pipeline_inst
     (
         .clk(clk),
+        .reset(rst),
         .z(z),
         .w(w),
         .b(b),
@@ -33,7 +35,16 @@ module decoder_fixed_point_pipeline_tb;
     // Clock Generation
     initial begin
         clk = 0;
-        forever #5 clk = ~clk; // 10 time unit periode clock cycle
+        forever #5 clk = ~clk; // 10 time unit clock cycle period
+    end
+
+    // Reset Periodik
+    initial begin
+        rst = 0; // Initially reset is low
+        forever begin
+            #50 rst = 0; // Reset bernilai LOW untuk 50 time unit
+            #50 rst = 1; // Reset bernilai HIGH untuk 50 time unit
+        end
     end
 
     initial begin
@@ -88,15 +99,11 @@ module decoder_fixed_point_pipeline_tb;
 
     integer i;
     initial begin
-    $dumpfile("decoder_fixed_point_pipeline_tb.vcd");
-    $dumpvars(0, decoder_fixed_point_pipeline_tb);
-    #50
+        $dumpfile("decoder_fixed_point_pipeline_tb.vcd");
+        $dumpvars(0, decoder_fixed_point_pipeline_tb);
+        #50
         for (i = 0; i < M_output; i = i + 1) begin
             #10;
-            $display("Output[%0d] in Hex: %h, in Binary: %b", 
-                     i, 
-                     out[i*BITSIZE +: BITSIZE], 
-                     out[i*BITSIZE +: BITSIZE]);
         end
     end
 endmodule
