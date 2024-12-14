@@ -12,7 +12,6 @@ module sampling_VAE #(
     input wire rst,                                    // Reset signal
     input wire [N_input*BITSIZE-1:0] ac,               // Input Mean
     input wire [N_input*BITSIZE-1:0] ad,               // Input Variance
-    input wire [4:0] seed,                             // -> 4 hex, 15 11 7 3
     output reg [M_output*BITSIZE-1:0] a,              // Output
     output wire [N_input*BITSIZE-1:0] epsilon          // Epsilon for verification
 );
@@ -126,6 +125,8 @@ endgenerate
 
 // Ambil nilai epsilon
 wire [BITSIZE-1:0] e[0:N_input-1];
+wire [4:0] state;
+reg  [4:0] seed;
 
 // GENERATE EPSILON (PRNG OUTPUT)
 generate
@@ -135,7 +136,8 @@ generate
             .random_out(e[i]),
             .clk(clk),
             .rst(rst),
-            .seed(seed)
+            .seed(seed),
+            .statee(state)
         );
 
         assign epsilon[(i+1)*BITSIZE-1:i*BITSIZE] = e[i];
