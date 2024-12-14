@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-`include "sampling_v1.v"                 // Random generator module
+`include "sampling.v"                 // Random generator module
 
 module sampling_VAE_tb;
 
@@ -13,7 +13,7 @@ module sampling_VAE_tb;
     reg rst;
     reg [N_input*BITSIZE-1:0] ac;
     reg [N_input*BITSIZE-1:0] ad;
-    reg [4:0] seed = 5'b01001;
+    reg [4:0] seed = 5'b11010;
     wire [M_output*BITSIZE-1:0] a;
     wire [N_input*BITSIZE-1:0] epsilon;
 
@@ -26,8 +26,6 @@ module sampling_VAE_tb;
         .clk(clk),
         .rst(rst),
         .ac(ac),
-        .ad(ad),
-        .seed(seed),
         .a(a),
         .epsilon(epsilon)
     );
