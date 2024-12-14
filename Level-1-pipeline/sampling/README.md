@@ -1,7 +1,7 @@
 Masih mencoba pake yang mana
 
 Versi 1
-![image](https://github.com/user-attachments/assets/c12d221b-7f9f-494a-98f1-ca816a8b7402)
+![image](https://github.com/user-attachments/assets/5c05b3d6-5078-4f4e-abf7-a432b96b7b33)
 
 Versi 2
-![image](https://github.com/user-attachments/assets/2bba41d8-4742-46f3-b728-fad80aaa673f)
+![image](https://github.com/user-attachments/assets/9887ec3e-cc29-49cf-b1f2-90834183f339)
