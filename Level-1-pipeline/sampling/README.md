@@ -1,6 +1,6 @@
-Masih mencoba pake yang mana
+Baru bikin versi 1
 
-Versi 1
+Versi 1 (Sekarang pakai yang ini)
 ![image](https://github.com/user-attachments/assets/d87682ec-c9fc-4df3-abbc-7fab45cab0ec)
 
 
