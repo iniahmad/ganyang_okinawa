@@ -13,7 +13,7 @@ module sampling_VAE #(
     input wire [N_input*BITSIZE-1:0] ac,               // Input Mean
     input wire [N_input*BITSIZE-1:0] ad,               // Input Variance
     input wire [4:0] seed,                             // -> 4 hex, 15 11 7 3
-    output wire [M_output*BITSIZE-1:0] a,              // Output
+    output reg [M_output*BITSIZE-1:0] a,              // Output
     output wire [N_input*BITSIZE-1:0] epsilon          // Epsilon for verification
 );
 
@@ -58,13 +58,15 @@ wire [15:0] x7 = 16'b0010001010110011; // x7 = 4.33743198
 wire [15:0] x8 = 16'b0011000111001110; // x8 = 6.2260287
 
 // Internal registers for pipeline stages
-reg [BITSIZE-1:0] m_out_reg [0:N_input-1];
-reg [BITSIZE-1:0] c_out_reg [0:N_input-1];
 reg [BITSIZE-1:0] mult_result_piecewise_reg [0:N_input-1];
 reg [BITSIZE-1:0] add_result_piecewise_reg [0:N_input-1];
 reg [BITSIZE-1:0] epsilon_reg [0:N_input-1];
 reg [BITSIZE-1:0] mult_result_sampling_reg [0:N_input-1];
-reg [BITSIZE-1:0] add_result_sampling_reg [0:M_output-1];
+reg [BITSIZE-1:0] add_result_sampling_reg[0:M_output-1];
+
+// Penyimpanan Bagian Penentuan Region
+wire [BITSIZE-1:0] m_out [0:N_input-1];        // Array untuk menyimpan m terpilih (tergantung region)
+wire [BITSIZE-1:0] c_out [0:N_input-1];        // Array untuk menyimpan c terpilih (tergantung region)
 
 // GENVAR LOOP
 genvar i;
@@ -72,7 +74,6 @@ genvar i;
 // PIECEWISE OPERATION
 generate
     for (i = 0; i < N_input; i = i + 1) begin : pipeline_piecewise
-        wire [BITSIZE-1:0] m_temp, c_temp;
         wire [BITSIZE-1:0] mult_temp, add_temp;
 
         // Compare piecewise
@@ -84,26 +85,15 @@ generate
             .m5    (m5), .m6(m6), .m7(m7), .m8(m8), .m9(m9),
             .c1    (c1), .c2(c2), .c3(c3), .c4(c4),
             .c5    (c5), .c6(c6), .c7(c7), .c8(c8), .c9(c9),
-            .m     (m_temp),
-            .c     (c_temp),
+            .m     (m_out[i]),
+            .c     (c_out[i]),
             .clk   (clk), .reset(rst)
         );
-
-        // Pipeline register stage 1
-        always @(posedge clk or posedge rst) begin
-            if (rst) begin
-                m_out_reg[i] <= 0;
-                c_out_reg[i] <= 0;
-            end else begin
-                m_out_reg[i] <= m_temp;
-                c_out_reg[i] <= c_temp;
-            end
-        end
 
         // Multiply m with ad
         fixed_point_multiply M1 (
             .A(ad[(i+1)*BITSIZE-1:i*BITSIZE]),
-            .B(m_out_reg[i]),
+            .B(m_out[i]),
             .C(mult_temp)
         );
 
@@ -119,7 +109,7 @@ generate
         // Add c
         fixed_point_add A1 (
             .A(mult_result_piecewise_reg[i]),
-            .B(c_out_reg[i]),
+            .B(c_out[i]),
             .C(add_temp)
         );
 
@@ -134,28 +124,21 @@ generate
     end
 endgenerate
 
+// Ambil nilai epsilon
+wire [BITSIZE-1:0] e[0:N_input-1];
+
 // GENERATE EPSILON (PRNG OUTPUT)
 generate
     for (i = 0; i < N_input; i = i + 1) begin : pipeline_epsilon
-        wire [BITSIZE-1:0] epsilon_temp;
 
         PRNG prng_inst (
-            .random_out(epsilon_temp),
+            .random_out(e[i]),
             .clk(clk),
             .rst(rst),
             .seed(seed)
         );
 
-        // Pipeline register for epsilon
-        always @(posedge clk or posedge rst) begin
-            if (rst) begin
-                epsilon_reg[i] <= 0;
-            end else begin
-                epsilon_reg[i] <= epsilon_temp;
-            end
-        end
-
-        assign epsilon[(i+1)*BITSIZE-1:i*BITSIZE] = epsilon_reg[i];
+        assign epsilon[(i+1)*BITSIZE-1:i*BITSIZE] = e[i];
     end
 endgenerate
 
@@ -166,7 +149,7 @@ generate
 
         fixed_point_multiply mult_inst (
             .A(add_result_piecewise_reg[i]),
-            .B(epsilon_reg[i]),
+            .B(e[i]),
             .C(mult_temp)
         );
 
@@ -201,7 +184,14 @@ generate
             end
         end
 
-        assign a[(i+1)*BITSIZE-1:i*BITSIZE] = add_result_sampling_reg[i];
+        // Use an always block to assign to a
+        always @(posedge clk or posedge rst) begin
+            if (rst) begin
+                a[(i+1)*BITSIZE-1:i*BITSIZE] <= 0;
+            end else begin
+                a[(i+1)*BITSIZE-1:i*BITSIZE] <= add_result_sampling_reg[i];
+            end
+        end
     end
 endgenerate
 
