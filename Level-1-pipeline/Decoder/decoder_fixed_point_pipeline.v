@@ -3,9 +3,9 @@
 
 module decoder_fixed_point_pipeline
 #(
-    parameter N_input = 2,        // Number of Inputs
-    parameter M_output = 9,       // Number of Outputs
-    parameter BITSIZE = 16        // Bit Size
+    parameter N_input = 2,        // Jumlah Input
+    parameter M_output = 9,       // Jumlah Output
+    parameter BITSIZE = 16        // Ukuran Bit
 )
 (
     input wire clk,                                     // Clock
