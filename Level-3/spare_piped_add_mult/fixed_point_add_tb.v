@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-`include "fixed_point_add.v"
+//`include "fixed_point_add.v"
 
 module fixed_point_add_tb;
 
@@ -7,6 +7,8 @@ module fixed_point_add_tb;
     parameter BITSIZE = 16;
 
     // Inputs
+    reg clk;
+    reg rst;
     reg [BITSIZE-1:0] A;
     reg [BITSIZE-1:0] B;
 
@@ -15,18 +17,28 @@ module fixed_point_add_tb;
 
     // Instantiate the Unit Under Test (UUT)
     fixed_point_add #(BITSIZE) uut (
+        .clk(clk),
+        .rst(rst),
         .A(A), 
         .B(B), 
         .C(C)
     );
 
+    // Clock generation
+    initial begin
+        clk = 0;
+        forever #5 clk = ~clk; // 100 MHz clock
+    end
+
     initial begin
         // Initialize inputs
         A = 0;
         B = 0;
+        rst = 1;
 
         // Wait for global reset
-        #100;
+        #20;
+        rst = 0;
         
         // Test cases
         // Normal addition

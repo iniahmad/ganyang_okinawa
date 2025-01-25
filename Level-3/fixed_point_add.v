@@ -1,19 +1,13 @@
 module fixed_point_add #(parameter BITSIZE = 16) (
-    input clk,                     // Clock signal
-    input rst,                     // Reset signal
-    input [BITSIZE-1:0] A,         // Fixed-point input A
-    input [BITSIZE-1:0] B,         // Fixed-point input B
-    output reg [BITSIZE-1:0] C     // Result output
+    input [BITSIZE-1:0] A,  // Fixed-point input A
+    input [BITSIZE-1:0] B,  // Fixed-point input B
+    output [BITSIZE-1:0] C  // Result output
 );
-    // Internal registers for inputs
-    reg [BITSIZE-1:0] A_in;
-    reg [BITSIZE-1:0] B_in;
-
     // Extract sign and value parts from both inputs
-    wire sign_A = A_in[BITSIZE-1];         // Sign bit A
-    wire sign_B = B_in[BITSIZE-1];         // Sign bit B
-    wire [BITSIZE-2:0] value_A = A_in[BITSIZE-2:0]; // Value A
-    wire [BITSIZE-2:0] value_B = B_in[BITSIZE-2:0]; // Value B
+    wire sign_A = A[BITSIZE-1];         // Sign bit A
+    wire sign_B = B[BITSIZE-1];         // Sign bit B
+    wire [BITSIZE-2:0] value_A = A[BITSIZE-2:0]; // Value A
+    wire [BITSIZE-2:0] value_B = B[BITSIZE-2:0]; // Value B
 
     // Result components
     wire [BITSIZE-1:0] sum;
@@ -33,18 +27,7 @@ module fixed_point_add #(parameter BITSIZE = 16) (
     // Handle overflow and underflow
     assign result_value = overflow ? {BITSIZE-1{1'b1}} : sum[BITSIZE-2:0];
 
-    // Sequential logic for registers
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
-            A_in <= 0;
-            B_in <= 0;
-            C <= 0;
-        end else begin
-            A_in <= A;
-            B_in <= B;
-            // Combine sign and value for the final result
-            C <= {result_sign, result_value};
-        end
-    end
+    // Combine sign and value for the final result
+    assign C = {result_sign, result_value};
 
 endmodule

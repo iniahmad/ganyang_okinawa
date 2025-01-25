@@ -1,12 +1,15 @@
 `timescale 1ns / 1ps
-`include "fixed_point_multiply.v"
+// `include "fixed_point_multiply.v"
 
 module fixed_point_multiply_tb;
-
+    
     // Parameters
     parameter BITSIZE = 16;
-
+    parameter FRAC = 11;
+    
     // Inputs
+    reg clk;
+    reg rst;
     reg [BITSIZE-1:0] A;
     reg [BITSIZE-1:0] B;
 
@@ -14,19 +17,29 @@ module fixed_point_multiply_tb;
     wire [BITSIZE-1:0] C;
 
     // Instantiate the Unit Under Test (UUT)
-    fixed_point_multiply #(BITSIZE) uut (
-        .A(A), 
-        .B(B), 
+    fixed_point_multiply #(BITSIZE, FRAC) uut (
+        .clk(clk),
+        .rst(rst),
+        .A(A),
+        .B(B),
         .C(C)
     );
+
+    // Clock generation
+    initial begin
+        clk = 0;
+        forever #5 clk = ~clk; // 100 MHz clock
+    end
 
     initial begin
         // Initialize inputs
         A = 0;
         B = 0;
+        rst = 1;
 
         // Wait for global reset
-        #100;
+        #15;
+        rst = 0;
         
         // Test cases
         // Normal multiplication
