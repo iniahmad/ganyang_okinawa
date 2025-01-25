@@ -63,68 +63,88 @@ end
 fixed_point_multiply mul_0 (
     .A(x[BITSIZE*j +: BITSIZE]),
     .B(w[(BITSIZE*j*6) + (BITSIZE*0) +: BITSIZE]),
-    .C(out_mul[0])
+    .C(out_mul[0]),
+    .clk(clk),
+    .reset(reset)
 );
 fixed_point_multiply mul_1 (
     .A(x[BITSIZE*j +: BITSIZE]),
     .B(w[(BITSIZE*j*6) + (BITSIZE*1) +: BITSIZE]),
-    .C(out_mul[1])
+    .C(out_mul[1]),
+    .clk(clk),
+    .reset(reset)
 );
 fixed_point_multiply mul_2 (
     .A(x[BITSIZE*j +: BITSIZE]),
     .B(w[(BITSIZE*j*6) + (BITSIZE*2) +: BITSIZE]),
-    .C(out_mul[2])
+    .C(out_mul[2]),
+    .clk(clk),
+    .reset(reset)
 );
 fixed_point_multiply mul_3 (
     .A(x[BITSIZE*j +: BITSIZE]),
     .B(w[(BITSIZE*j*6) + (BITSIZE*3) +: BITSIZE]),
-    .C(out_mul[3])
+    .C(out_mul[3]),
+    .clk(clk),
+    .reset(reset)
 );
 fixed_point_multiply mul_4 (
     .A(x[BITSIZE*j +: BITSIZE]),
     .B(w[(BITSIZE*j*6) + (BITSIZE*4) +: BITSIZE]),
-    .C(out_mul[4])
+    .C(out_mul[4]),
+    .clk(clk),
+    .reset(reset)
 );
 fixed_point_multiply mul_5 (
     .A(x[BITSIZE*j +: BITSIZE]),
     .B(w[(BITSIZE*j*6) + (BITSIZE*5) +: BITSIZE]),
-    .C(out_mul[5])
+    .C(out_mul[5]),
+    .clk(clk),
+    .reset(reset)
 );
 
 // Parallel addition logic for 6 elements
 fixed_point_add add_0 (
     .A(out_mul[0]),
     .B(in_add[0]),
-    .C(out_add[0])
+    .C(out_add[0]),
+    .clk(clk),
+    .reset(reset)
 );
 fixed_point_add add_1 (
     .A(out_mul[1]),
     .B(in_add[1]),
-    .C(out_add[1])
+    .C(out_add[1]),
+    .clk(clk),
+    .reset(reset)
 );
 fixed_point_add add_2 (
     .A(out_mul[2]),
     .B(in_add[2]),
-    .C(out_add[2])
+    .C(out_add[2]),
+    .clk(clk),
+    .reset(reset)
 );
 fixed_point_add add_3 (
     .A(out_mul[3]),
     .B(in_add[3]),
-    .C(out_add[3])
+    .C(out_add[3]),
+    .clk(clk),
+    .reset(reset)
 );
 fixed_point_add add_4 (
     .A(out_mul[4]),
     .B(in_add[4]),
-    .C(out_add[4])
+    .C(out_add[4]),
+    .clk(clk),
+    .reset(reset)
 );
 fixed_point_add add_5 (
     .A(out_mul[5]),
     .B(in_add[5]),
-    .C(out_add[5])
+    .C(out_add[5]),
+    .clk(clk),
+    .reset(reset)
 );
-
-
-
-
 
 endmodule
