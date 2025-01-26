@@ -36,12 +36,12 @@ always @(posedge clk or posedge reset) begin
         out_stage[0] <= 0; out_stage[1] <= 0; out_stage[2] <= 0; out_stage[3] <= 0; out_stage[4] <= 0; out_stage[5] <= 0;
     end else begin
         if (!done) begin
-            out_stage[0] = out_add[0];
-            out_stage[1] = out_add[1];
-            out_stage[2] = out_add[2];
-            out_stage[3] = out_add[3];
-            out_stage[4] = out_add[4];
-            out_stage[5] = out_add[5];
+            out_stage[0] <= out_add[0];
+            out_stage[1] <= out_add[1];
+            out_stage[2] <= out_add[2];
+            out_stage[3] <= out_add[3];
+            out_stage[4] <= out_add[4];
+            out_stage[5] <= out_add[5];
 
             if (j < 9) begin
                 // Increment iteration
@@ -93,12 +93,12 @@ endgenerate
 // end
 
 // invert output only
-assign y[BITSIZE*5 +: BITSIZE] = out_stage[0];
-assign y[BITSIZE*4 +: BITSIZE] = out_stage[1];
-assign y[BITSIZE*3 +: BITSIZE] = out_stage[2];
-assign y[BITSIZE*2 +: BITSIZE] = out_stage[3];
-assign y[BITSIZE*1 +: BITSIZE] = out_stage[4];
-assign y[BITSIZE*0 +: BITSIZE] = out_stage[5];
+assign y[BITSIZE*0 +: BITSIZE] = out_stage[0];
+assign y[BITSIZE*1 +: BITSIZE] = out_stage[1];
+assign y[BITSIZE*2 +: BITSIZE] = out_stage[2];
+assign y[BITSIZE*3 +: BITSIZE] = out_stage[3];
+assign y[BITSIZE*4 +: BITSIZE] = out_stage[4];
+assign y[BITSIZE*5 +: BITSIZE] = out_stage[5];
 
 // assign y[BITSIZE*0 +: BITSIZE] = out_stage[0];
 // assign y[BITSIZE*1 +: BITSIZE] = out_stage[1];
