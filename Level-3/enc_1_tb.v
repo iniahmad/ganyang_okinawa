@@ -26,12 +26,12 @@ module tb_matrix_vector_mult;
         .y(y)
     );
 
-    assign out_stage[0] = y [BITSIZE*0 +: BITSIZE];
-    assign out_stage[1] = y [BITSIZE*1 +: BITSIZE];
-    assign out_stage[2] = y [BITSIZE*2 +: BITSIZE];
-    assign out_stage[3] = y [BITSIZE*3 +: BITSIZE];
-    assign out_stage[4] = y [BITSIZE*4 +: BITSIZE];
-    assign out_stage[5] = y [BITSIZE*5 +: BITSIZE];
+    assign out_stage[0] = y[BITSIZE*0 +: BITSIZE];
+    assign out_stage[1] = y[BITSIZE*1 +: BITSIZE];
+    assign out_stage[2] = y[BITSIZE*2 +: BITSIZE];
+    assign out_stage[3] = y[BITSIZE*3 +: BITSIZE];
+    assign out_stage[4] = y[BITSIZE*4 +: BITSIZE];
+    assign out_stage[5] = y[BITSIZE*5 +: BITSIZE];
 
     // Clock generation
     initial begin
@@ -63,7 +63,7 @@ module tb_matrix_vector_mult;
         // b = 0;
 
         // Simulation runtime
-        #(CLK_PERIOD * (10+1) + 5); // Run for 20 clock cycles
+        #(CLK_PERIOD * (12+1) + 5); // Run for 20 clock cycles
         $finish;
     end
 

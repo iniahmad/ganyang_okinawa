@@ -40,7 +40,7 @@ module tb_matrix_vector_mult;
     // Reset logic
     initial begin
         reset = 1;
-        #(CLK_PERIOD);
+        #(CLK_PERIOD/2);
         reset = 0;
     end
 
@@ -48,17 +48,17 @@ module tb_matrix_vector_mult;
     initial begin
         // Randomized inputs using the specified fixed-point values
         // w = generate_random_data(6); // 1x6 matrix = 6 values
-        w = 96'100008001000080010000800;
+        w = 96'h300020000800080008000800;
 
         // x = generate_random_data(6); // 6-element vector
-        x = 96'080010000800100008001000;
+        x = 96'h080008000800080008000800;
 
         // b = generate_random_data(1);  // 1-element bias vector
-        b = 16'0400;
+        b = 16'h0400;
         // b = 0;
 
         // Simulation runtime
-        #(CLK_PERIOD * (6+1) + 5); // Run for 20 clock cycles
+        #(CLK_PERIOD * (8+1) + 5); // Run for 20 clock cycles
         $finish;
     end
 
