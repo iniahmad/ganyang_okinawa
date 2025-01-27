@@ -63,7 +63,7 @@ end
 genvar idx;
 generate
     for (idx = 0; idx < 6; idx = idx + 1) begin : multiplier
-        assign  in_mul_1 [idx]= (j == 0) ? x[(BITSIZE*0) +: BITSIZE] :
+        assign in_mul_1 [idx] = (j == 0) ? x[(BITSIZE*0) +: BITSIZE] :
                                 (j == 1) ? x[(BITSIZE*1) +: BITSIZE] :
                                 (j == 2) ? x[(BITSIZE*2) +: BITSIZE] :
                                 (j == 3) ? x[(BITSIZE*3) +: BITSIZE] :
@@ -72,7 +72,7 @@ generate
                                 (j == 6) ? x[(BITSIZE*6) +: BITSIZE] :
                                 (j == 7) ? x[(BITSIZE*7) +: BITSIZE] :
                                 (j == 8) ? x[(BITSIZE*8) +: BITSIZE] : x[(BITSIZE*9) +: BITSIZE];
-        assign  in_mul_2 [idx]= (j == 0) ? w[(BITSIZE*6*0) + (BITSIZE*idx) +: BITSIZE] :
+        assign in_mul_2 [idx] = (j == 0) ? w[(BITSIZE*6*0) + (BITSIZE*idx) +: BITSIZE] :
                                 (j == 1) ? w[(BITSIZE*6*1) + (BITSIZE*idx) +: BITSIZE] :
                                 (j == 2) ? w[(BITSIZE*6*2) + (BITSIZE*idx) +: BITSIZE] :
                                 (j == 3) ? w[(BITSIZE*6*3) + (BITSIZE*idx) +: BITSIZE] :

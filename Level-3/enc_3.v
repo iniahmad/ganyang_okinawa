@@ -11,33 +11,37 @@ module enc_1 #(parameter BITSIZE = 16) (
 );
 
 // Internal signals
-wire [BITSIZE-1:0] out_mul   [5:0];   // Parallel multipliers output (6 elements per row)
-wire [BITSIZE-1:0] in_add    [5:0];   // Input to adders (6 elements)
-wire [BITSIZE-1:0] out_add   [5:0];   // Output from adders (6 elements)
-reg  [BITSIZE-1:0] out_stage [5:0]; // Final output stage (6 elements)
+wire [BITSIZE-1:0] in_mul_1    [5:0];
+wire [BITSIZE-1:0] in_mul_2    [5:0];
+wire [BITSIZE-1:0] out_mul     [5:0]; // Parallel multipliers output (6 elements per row)
+reg  [BITSIZE-1:0] out_mul_reg [5:0];
+wire [BITSIZE-1:0] in_add      [5:0]; // Input to adders (6 elements)
+reg  [BITSIZE-1:0] in_add_reg  [5:0];
+wire [BITSIZE-1:0] out_add     [5:0]; // Output from adders (6 elements)
 reg  done;
-
-// Combinational logic to determine in_add
-assign in_add[0] = b[BITSIZE*0 +: BITSIZE];
-assign in_add[1] = b[BITSIZE*1 +: BITSIZE];
-assign in_add[2] = b[BITSIZE*2 +: BITSIZE];
-assign in_add[3] = b[BITSIZE*3 +: BITSIZE];
-assign in_add[4] = b[BITSIZE*4 +: BITSIZE];
-assign in_add[5] = b[BITSIZE*5 +: BITSIZE];
 
 // Sequential logic
 always @(posedge clk or posedge reset) begin
     if (reset) begin
         done <= 0;
-        out_stage[0] <= 0; out_stage[1] <= 0; out_stage[2] <= 0; out_stage[3] <= 0; out_stage[4] <= 0; out_stage[5] <= 0;
+        out_mul_reg[0] <= 0; out_mul_reg[1] <= 0; out_mul_reg[2] <= 0; out_mul_reg[3] <= 0; out_mul_reg[4] <= 0; out_mul_reg[5] <= 0;  
+        in_add_reg[0]  <= 0; in_add_reg[1]  <= 0; in_add_reg[2]  <= 0; in_add_reg[3]  <= 0; in_add_reg[4]  <= 0; in_add_reg[5]  <= 0;
     end else begin
         if (!done) begin
-            out_stage[0] <= out_add[0];
-            out_stage[1] <= out_add[1];
-            out_stage[2] <= out_add[2];
-            out_stage[3] <= out_add[3];
-            out_stage[4] <= out_add[4];
-            out_stage[5] <= out_add[5];
+            out_mul_reg[0] <= out_mul[0];
+            out_mul_reg[1] <= out_mul[1];
+            out_mul_reg[2] <= out_mul[2];
+            out_mul_reg[3] <= out_mul[3];
+            out_mul_reg[4] <= out_mul[4];
+            out_mul_reg[5] <= out_mul[5];
+
+            in_add_reg[0] <= in_add[0];
+            in_add_reg[1] <= in_add[1];
+            in_add_reg[2] <= in_add[2];
+            in_add_reg[3] <= in_add[3];
+            in_add_reg[4] <= in_add[4];
+            in_add_reg[5] <= in_add[5];
+
             done <= 1;
         end
     end
@@ -48,10 +52,13 @@ end
 genvar idx;
 generate
     for (idx = 0; idx < 6; idx = idx + 1) begin : multiplier
+        assign in_mul_1 [idx] = x[(BITSIZE*0) +: BITSIZE];
+        assign in_mul_2 [idx] = w[(BITSIZE*idx) +: BITSIZE];
+
         fixed_point_multiply mul (
-            .A(x[0 +: BITSIZE]),
-            .B(w[(BITSIZE*idx) +: BITSIZE]),
-            .C(out_mul[idx])
+            .A(in_mul_1[idx]),
+            .B(in_mul_2[idx]),
+            .C(out_mul [idx])
         );
     end
 endgenerate
@@ -59,20 +66,16 @@ endgenerate
 // Parallel addition logic for 6 elements
 generate
     for (idx = 0; idx < 6; idx = idx + 1) begin : adder
+        assign in_add[idx] = b[BITSIZE*idx +: BITSIZE];
+
         fixed_point_add add (
             .A(out_mul[idx]),
             .B(in_add [idx]),
             .C(out_add[idx])
         );
+
+        assign y[BITSIZE*idx +: BITSIZE] = in_add_reg[idx];
     end
 endgenerate
-
-// invert output only
-assign y[BITSIZE*0 +: BITSIZE] = out_stage[0];
-assign y[BITSIZE*1 +: BITSIZE] = out_stage[1];
-assign y[BITSIZE*2 +: BITSIZE] = out_stage[2];
-assign y[BITSIZE*3 +: BITSIZE] = out_stage[3];
-assign y[BITSIZE*4 +: BITSIZE] = out_stage[4];
-assign y[BITSIZE*5 +: BITSIZE] = out_stage[5];
 
 endmodule
