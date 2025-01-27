@@ -1,6 +1,7 @@
 module enc_control (
     input  wire clk,
     input  wire reset,
+    output wire [5:0] debug_cc,
     output reg  enc1_start,
     output reg  enc2_start,
     output reg  enc3_start,
@@ -20,6 +21,8 @@ localparam enc4_cc   = 8;
 localparam sigmoid   = 3;
 
 reg [5:0] cc;
+
+assign debug_cc [5:0] = cc [5:0];
 
 always @(posedge clk or posedge reset) begin
     if (reset) begin
