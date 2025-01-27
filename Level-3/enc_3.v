@@ -1,10 +1,10 @@
 `include "fixed_point_add.v"
 `include "fixed_point_multiply.v"
 
-module enc_1 #(parameter BITSIZE = 16) (
+module enc_3 #(parameter BITSIZE = 16) (
     input wire  clk,
     input wire  reset,
-    input wire  [BITSIZE*1-1:0]    x,  // Input vector (10 elements)
+    input wire  [BITSIZE*1-1:0]    x,  // Input vector (1 elements)
     input wire  [BITSIZE*6*1-1:0]  w,  // Weight matrix (6x10)
     input wire  [BITSIZE*6-1:0]    b,  // Bias vector (6 elements)
     output wire [BITSIZE*6-1:0]    y   // Output vector (6 elements)
