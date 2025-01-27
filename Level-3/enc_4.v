@@ -36,7 +36,7 @@ always @(posedge clk or posedge reset) begin
             in_add_reg[0] <= in_add[0];
             in_add_reg[1] <= in_add[1];
 
-            if (j < 5) begin
+            if (j < 6) begin
                 // Increment iteration
                 j <= j + 1;
             end else begin
@@ -79,9 +79,9 @@ generate
         assign in_add[idx] = (j == 0) ? b[BITSIZE*idx +: BITSIZE] : out_add[idx];
 
         fixed_point_add add (
-            .A(out_mul[idx]),
-            .B(in_add [idx]),
-            .C(out_add[idx])
+            .A(out_mul_reg[idx]),
+            .B(in_add_reg [idx]),
+            .C(out_add    [idx])
         );
 
         assign y[BITSIZE*idx +: BITSIZE] = in_add_reg[idx];

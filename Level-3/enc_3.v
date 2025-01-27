@@ -18,11 +18,13 @@ reg  [BITSIZE-1:0] out_mul_reg [5:0];
 wire [BITSIZE-1:0] in_add      [5:0]; // Input to adders (6 elements)
 reg  [BITSIZE-1:0] in_add_reg  [5:0];
 wire [BITSIZE-1:0] out_add     [5:0]; // Output from adders (6 elements)
+reg  [3:0] j;
 reg  done;
 
 // Sequential logic
 always @(posedge clk or posedge reset) begin
     if (reset) begin
+        j <= 0;
         done <= 0;
         out_mul_reg[0] <= 0; out_mul_reg[1] <= 0; out_mul_reg[2] <= 0; out_mul_reg[3] <= 0; out_mul_reg[4] <= 0; out_mul_reg[5] <= 0;  
         in_add_reg[0]  <= 0; in_add_reg[1]  <= 0; in_add_reg[2]  <= 0; in_add_reg[3]  <= 0; in_add_reg[4]  <= 0; in_add_reg[5]  <= 0;
@@ -42,9 +44,17 @@ always @(posedge clk or posedge reset) begin
             in_add_reg[4] <= in_add[4];
             in_add_reg[5] <= in_add[5];
 
-            done <= 1;
+            if (j < 1) begin
+                // Increment iteration
+                j <= j + 1;
+            end else begin
+                done <= 1;
+                // $display("done!");
+            end
         end
     end
+    // $display("time: %0t\t, clk: %b, reset: %b\t, j = %d, in_mul_1 = %h in_mul_2 = %h out_mul = %h, out_mul_reg = %h, in_add = %h out_add = %h output = %h",
+    //          $time, clk, reset, j, in_mul_1[0], in_mul_2[0], out_mul[0], out_mul_reg[0], in_add_reg[0], out_add[0], y[BITSIZE*0 +: BITSIZE]);
 end
 
 
@@ -66,12 +76,12 @@ endgenerate
 // Parallel addition logic for 6 elements
 generate
     for (idx = 0; idx < 6; idx = idx + 1) begin : adder
-        assign in_add[idx] = b[BITSIZE*idx +: BITSIZE];
+        assign in_add[idx] = (j == 0) ? b[BITSIZE*idx +: BITSIZE] : out_add[idx];
 
         fixed_point_add add (
-            .A(out_mul[idx]),
-            .B(in_add [idx]),
-            .C(out_add[idx])
+            .A(out_mul_reg[idx]),
+            .B(in_add_reg [idx]),
+            .C(out_add    [idx])
         );
 
         assign y[BITSIZE*idx +: BITSIZE] = in_add_reg[idx];
