@@ -199,7 +199,7 @@ module top_arrhythmia #(parameter BITSIZE = 16) (
 
     genvar i;
     generate
-        for (i = 0; i < 6; i = i + 1) begin : softplus_layer
+        for (i = 0; i < 6; i = i + 1) begin : softplus_layer_enc_1
             softplus_8slice_piped softplus_enc_1 (
                 .clk(clk),
                 .reset(reset),
@@ -209,7 +209,68 @@ module top_arrhythmia #(parameter BITSIZE = 16) (
         end
     endgenerate
 
-    // LAMBDA layer
+    // enc_2 before lambda
+    wire [BITSIZE*1-1:0] enc_2_mean_out;
+    wire [BITSIZE*1-1:0] enc_2_var_out;
 
+    enc_2 #(.BITSIZE(BITSIZE)) 
+    mean (
+        .clk(clk),
+        .reset(reset),
+        .x(softplus_enc_1_out),
+        .w(w_enc_2_mean),
+        .b(b_enc_2_mean),
+        .y(enc_2_mean_out)
+    );
+
+    enc_2 #(.BITSIZE(BITSIZE)) 
+    var (
+        .clk(clk),
+        .reset(reset),
+        .x(softplus_enc_1_out),
+        .w(w_enc_2_var),
+        .b(b_enc_2_var),
+        .y(enc_2_var_out)
+    );
+
+    // LAMBDA layer
+    wire [BITSIZE*1-1:0] lambda_out;
+
+    lambda_layer
+    lambda (
+    .clk(clk),
+    .reset(reset),
+    .mean(enc_2_mean_out),
+    .var(enc_2_var_out),
+    .lambda_out(lambda_out)
+    );
+
+    // enc_3
+    wire [BITSIZE*6-1:0] enc_3_out;
+
+    enc_3 #(.BITSIZE(BITSIZE))
+    hidden_classifier(
+        .clk(clk),
+        .reset(reset),
+        .x(lambda_out),
+        .w(w_enc_3),
+        .b(b_enc_3),
+        .y(enc_3_out)
+    );
+
+    wire [BITSIZE*6-1:0] softplus_enc_3_out;
+
+    generate
+        for (i = 0; i < 6; i = i + 1) begin : softplus_layer_enc_3
+            softplus_8slice_piped softplus_enc_3 (
+                .clk(clk),
+                .reset(reset),
+                .data_in(enc_3_out[BITSIZE*i +: BITSIZE]),
+                .data_out(softplus_enc_3_out[BITSIZE*i +: BITSIZE])
+            );
+        end
+    endgenerate
+
+    // enc_4
 
 endmodule

@@ -73,7 +73,6 @@ wire [BITSIZE-1:0] c_out;        // Untuk menyimpan c terpilih (tergantung regio
 wire [BITSIZE-1:0] mul_result;          // Hasil perkalian m * x pada persamaan garis]
 wire [BITSIZE-1:0] data_out_wire;
 
-
 // BAGIAN PIECEWISE
 // Compare piecewise
 compare_8float custom_mux (

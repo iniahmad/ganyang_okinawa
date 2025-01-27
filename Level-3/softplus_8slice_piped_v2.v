@@ -1,57 +1,47 @@
-// `include "compare_8float_v2.v"
-// `include "fixed_point_multiply.v"
 // `include "fixed_point_add.v"
+// `include "fixed_point_multiply.v"
+// `include "compare_8float.v"
 
-module sigmoid8_piped 
-#(
-    parameter BITSIZE = 16 // Adjusting the size to the parameter
-)
+module softplus_8slice_piped_v2
+#(parameter BITSIZE = 16)
 (
-    input clk, reset,
-    input wire signed [BITSIZE-1:0] data_in,  
-    output wire signed [BITSIZE-1:0] data_out
+    input clk,
+    input reset,
+    input wire  [15:0] data_in,
+    output wire [15:0] data_out
 );
 
-// Coefficients m and c
-wire [15:0] m1 = 16'b0000000000000110; // m1 = 0.0032
-wire [15:0] c1 = 16'b0000000000110100; // c1 = 0.0257
+    reg [15:0] m1 = 16'b0000000000001010;
+    reg [15:0] m2 = 16'b0000000001100011;
+    reg [15:0] m3 = 16'b0000000100111000;
+    reg [15:0] m4 = 16'b0000001001111110;
+    reg [15:0] m5 = 16'b0000001111111111;
+    reg [15:0] m6 = 16'b0000010110000001;
+    reg [15:0] m7 = 16'b0000001110001110;
+    reg [15:0] m8 = 16'b0000000110101001;
+    reg [15:0] m9 = 16'b0000011111110101;
 
-wire [15:0] m2 = 16'b0000000000110100; // m2 = 0.0258
-wire [15:0] c2 = 16'b0000000100000010; // c2 = 0.1261
+    reg [15:0] c1 = 16'b0000000001010000;
+    reg [15:0] c2 = 16'b0000000110101010;
+    reg [15:0] c3 = 16'b0000001110001111;
+    reg [15:0] c4 = 16'b0000010100011100;
+    reg [15:0] c5 = 16'b0000010110110001;
+    reg [15:0] c6 = 16'b0000010100011100;
+    reg [15:0] c7 = 16'b0000101010100111;
+    reg [15:0] c8 = 16'b0000110001111011;
+    reg [15:0] c9 = 16'b0000000001010001;
 
-wire [15:0] m3 = 16'b0000000010011100; // m3 = 0.0765
-wire [15:0] c3 = 16'b0000001000110011; // c3 = 0.2751
+    reg [15:0] x1 = 16'b1001111100000000;
+    reg [15:0] x2 = 16'b1001001000101001;
+    reg [15:0] x3 = 16'b1000100110111111;
+    reg [15:0] x4 = 16'b1000001100011011;
+    reg [15:0] x5 = 16'b0000001100010100;
+    reg [15:0] x6 = 16'b0000100111000101;
+    reg [15:0] x7 = 16'b0001001000110101;
+    reg [15:0] x8 = 16'b0001111011111000;
 
-wire [15:0] m4 = 16'b0000000100110110; // m4 = 0.1516
-wire [15:0] c4 = 16'b0000001101011001; // c4 = 0.4187
-
-wire [15:0] m5 = 16'b0000000111010110; // m5 = 0.2295
-wire [15:0] c5 = 16'b0000001111111111; // c5 = 0.5000
-
-wire [15:0] m6 = 16'b0000000100110110; // m6 = 0.1516
-wire [15:0] c6 = 16'b0000010010100110; // c6 = 0.5813
-
-wire [15:0] m7 = 16'b0000000010011100; // m7 = 0.0765
-wire [15:0] c7 = 16'b0000010111001100; // c7 = 0.7249
-
-wire [15:0] m8 = 16'b0000000000110100; // m8 = 0.0258
-wire [15:0] c8 = 16'b0000011011111101; // c8 = 0.8739
-
-wire [15:0] m9 = 16'b0000000000000110; // m9 = 0.0016
-wire [15:0] c9 = 16'b0000011111001011; // c9 = 0.9743
-
-// Optimal slice values for x
-wire [15:0] x1 = 16'b1010001110001010; // x1 = -4.4428
-wire [15:0] x2 = 16'b1001011101111001; // x2 = -2.9341
-wire [15:0] x3 = 16'b1000111101001101; // x3 = -1.9129
-wire [15:0] x4 = 16'b1000100001011001; // x4 = -1.0437
-wire [15:0] x5 = 16'b0000100001011001; // x5 =  1.0437
-wire [15:0] x6 = 16'b0000111101001101; // x6 =  1.9129
-wire [15:0] x7 = 16'b0001011101111001; // x7 =  2.9341
-wire [15:0] x8 = 16'b0010001110001010; // x8 =  4.4428
-
-wire signed [BITSIZE-1:0] m_out;
-wire signed [BITSIZE-1:0] c_out;
+    wire signed [BITSIZE-1:0] m_out;
+    wire signed [BITSIZE-1:0] c_out;
 
 // Stage 1: Compare module
 compare_8float custom_mux (
@@ -147,6 +137,5 @@ fixed_point_add #(
 //        data_out <= data_out_wire;  // Store out_mul value into out_mul_reg
 //    end
 //end
-
 
 endmodule
