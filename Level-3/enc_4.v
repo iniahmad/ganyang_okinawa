@@ -1,5 +1,5 @@
-`include "fixed_point_add.v"
-`include "fixed_point_multiply.v"
+// `include "fixed_point_add.v"
+// `include "fixed_point_multiply.v"
 
 module enc_4 #(parameter BITSIZE = 16) (
     input wire  clk,

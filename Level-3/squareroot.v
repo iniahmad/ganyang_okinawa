@@ -1,6 +1,6 @@
-`include "fixed_point_multiply.v" // Modul custom multiplier
-`include "fixed_point_add.v"      // Modul custom adder 
-`include "compare_8float.v"       // Modul compare untuk piecewise
+// `include "fixed_point_multiply.v" // Modul custom multiplier
+// `include "fixed_point_add.v"      // Modul custom adder 
+// `include "compare_8float.v"       // Modul compare untuk piecewise
 
 module squareroot_piped #(
     parameter BITSIZE = 16        // Fixed Point 16-bit

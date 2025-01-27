@@ -1,6 +1,6 @@
-`include "fixed_point_add.v"
-`include "fixed_point_multiply.v"
-`include "compare_8float.v"
+// `include "fixed_point_add.v"
+// `include "fixed_point_multiply.v"
+// `include "compare_8float.v"
 
 module softplus_8slice_piped
 (

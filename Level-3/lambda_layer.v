@@ -1,6 +1,6 @@
-`include "delay3cc.v"
-`include "squareroot.v"
-`include "PRNG.v"
+// `include "delay3cc.v"
+// `include "squareroot.v"
+// `include "PRNG.v"
 
 module lambda_layer (
     input  wire clk,                                  // Clock signal
