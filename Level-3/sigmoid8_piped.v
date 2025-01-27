@@ -53,7 +53,7 @@ wire [15:0] x8 = 16'b0010001110001010; // x8 =  4.4428
 wire signed [BITSIZE-1:0] m_out;
 wire signed [BITSIZE-1:0] c_out;
 
-// Stage 2: Compare module
+// Stage 1: Compare module
 compare_8float custom_mux (
     .data  (data_in),
     .x1    (x1),
@@ -90,46 +90,51 @@ compare_8float custom_mux (
 
 // Register to store data_in for use in the next stage
 reg [BITSIZE-1:0] data_in_2;
+reg [BITSIZE-1:0] data_in_3;
 
 always @(posedge clk or posedge reset) begin
-    if (reset)
+    if (reset) begin
         data_in_2 <= {BITSIZE{1'b0}};  // Reset to zero on reset
-    else
+        data_in_3 <= {BITSIZE{1'b0}};  // Reset to zero on reset
+    end else begin
         data_in_2 <= data_in;  // Assign data_in to data_in_2 on each clock cycle
+        data_in_3 <= data_in_2;  // Assign data_in to data_in_2 on each clock cycle
+    end
 end
 
-// Stage 3: Multiplication
+// Stage 2: Multiplication
 wire signed [BITSIZE-1:0] out_mul;
-reg signed [BITSIZE-1:0] out_mul_reg; // Register to store the result of multiplication
+//reg signed [BITSIZE-1:0] out_mul_reg; // Register to store the result of multiplication
 
 fixed_point_multiply #(
     .BITSIZE(BITSIZE)  // Pass BITSIZE to the multiply module
 ) custom_mul (
-    .A  (data_in_2), // Use the registered value from Stage 2
+    .A  (data_in_3), // Use the registered value from Stage 2
     .B  (m_out),     // Output from the compare module
     .C  (out_mul)    // Output from the multiplier
 );
 
-// Stage 4: Storing the result of multiplication
-reg [BITSIZE-1:0] c_out2; // Register for c_out value
+// // Stage 4: Storing the result of multiplication
+// reg [BITSIZE-1:0] c_out2; // Register for c_out value
 
-always @(posedge clk or posedge reset) begin
-    if (reset) begin
-        out_mul_reg <= {BITSIZE{1'b0}};  // Reset the register to zero
-        c_out2 <= {BITSIZE{1'b0}};       // Reset c_out2 register to zero
-    end else begin
-        out_mul_reg <= out_mul;  // Store out_mul value into out_mul_reg
-        c_out2 <= c_out;
-    end
-end
+// always @(posedge clk or posedge reset) begin
+//     if (reset) begin
+//         out_mul_reg <= {BITSIZE{1'b0}};  // Reset the register to zero
+//         c_out2 <= {BITSIZE{1'b0}};       // Reset c_out2 register to zero
+//     end else begin
+//         out_mul_reg <= out_mul;  // Store out_mul value into out_mul_reg
+//         c_out2 <= c_out;
+//     end
+// end
 
 wire [BITSIZE-1:0] data_out_wire;
 // Stage 5: Addition
 fixed_point_add #(
     .BITSIZE(BITSIZE)  // Pass BITSIZE to the add module
 ) custom_add (
-    .A (out_mul_reg),   // Use out_mul_reg for the addition input
-    .B (c_out2),        // Use c_out2 for the second input
+    .A (out_mul),   // Use out_mul_reg for the addition input
+    // .B (c_out2),        // Use c_out2 for the second input
+    .B (c_out),        // Use c_out2 for the second input
     .C (data_out_wire)       // Output of the addition
 );
 
