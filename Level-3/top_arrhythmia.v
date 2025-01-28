@@ -331,6 +331,7 @@ b_enc_4 = {
     intermediate_layer(
         .clk(clk),
         .reset(enc1_start),
+//        .reset(reset),
         .x(x),
         .w(w_enc_1),
         .b(b_enc_1),
@@ -350,6 +351,16 @@ b_enc_4 = {
             );
         end
     endgenerate
+    
+    reg [BITSIZE*6-1:0] softplus_enc_1_out_reg;
+    
+    always @(posedge clk or posedge reset) begin
+     if (reset) begin
+         softplus_enc_1_out_reg <= {BITSIZE*6{1'b0}};  // Reset the register to zero
+     end else begin
+         softplus_enc_1_out_reg <= softplus_enc_1_out;  // Reset the register to zero
+     end
+    end
 
     // enc_2 before lambda
     wire [BITSIZE*1-1:0] enc_2_mean_out;
@@ -359,7 +370,7 @@ b_enc_4 = {
     mean (
         .clk(clk),
         .reset(enc2_start),
-        .x(softplus_enc_1_out),
+        .x(softplus_enc_1_out_reg),
         .w(w_enc_2_mean),
         .b(b_enc_2_mean),
         .y(enc_2_mean_out)
@@ -369,7 +380,7 @@ b_enc_4 = {
     var (
         .clk(clk),
         .reset(enc2_start),
-        .x(softplus_enc_1_out),
+        .x(softplus_enc_1_out_reg),
         .w(w_enc_2_var),
         .b(b_enc_2_var),
         .y(enc_2_var_out)
@@ -412,6 +423,16 @@ b_enc_4 = {
             );
         end
     endgenerate
+    
+    reg [BITSIZE*6-1:0] softplus_enc_3_out_reg;
+    
+    always @(posedge clk or posedge reset) begin
+     if (reset) begin
+         softplus_enc_3_out_reg <= {BITSIZE*6{1'b0}};  // Reset the register to zero
+     end else begin
+         softplus_enc_3_out_reg <= softplus_enc_3_out;  // Reset the register to zero
+     end
+    end
 
     // enc_4
     wire [BITSIZE*2-1:0] enc_4_out;
@@ -420,7 +441,7 @@ b_enc_4 = {
     classifier_output (
         .clk(clk),
         .reset(enc4_start),
-        .x(softplus_enc_3_out),
+        .x(softplus_enc_3_out_reg),
         .w(w_enc_4),
         .b(b_enc_4),
         .y(enc_4_out)

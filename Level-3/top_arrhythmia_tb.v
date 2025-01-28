@@ -29,7 +29,7 @@ module top_arrhythmia_tb;
         .done_flag_out(done_flag)
     );
 
-    terus bagian inisialisasi:
+    // terus bagian inisialisasi:
 
 /// for output ///
     localparam max_data = 25;

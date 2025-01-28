@@ -56,37 +56,63 @@ module lambda_layer_v2 (
         .random_out(prng_out),
         .statee()
     );
+    
+    reg [15:0] prng_out_reg;
+    reg [15:0] sigma_sqrt_reg;
+    reg [15:0] delayed_mean_2ke3;
+    
+    always @(posedge clk) begin
+        if (reset) begin
+            prng_out_reg <= 16'b0;
+            sigma_sqrt_reg <= 16'b0;
+            delayed_mean_2ke3 <= 16'b0;
+        end else begin
+            prng_out_reg <= prng_out;
+            sigma_sqrt_reg <= sigma_sqrt;
+            delayed_mean_2ke3 <= 16'b0;        
+        end
+    end
 
     // Instantiate Multiplier (sigma_sqrt * prng_out)
     fixed_point_multiply mult (
-        .A(sigma_sqrt),
-        .B(prng_out),
+        .A(sigma_sqrt_reg),
+        .B(prng_out_reg),
         .C(product_var)
     );
     
-//    reg [15:0] product_var_reg;
-//    reg [15:0] delayed_mean_3;
+    reg [15:0] product_var_reg;
+    reg [15:0] delayed_mean_3;
     
-//    always @(posedge clk) begin
-//        if (reset) begin
-//            product_var_reg <= 16'b0;
-//            delayed_mean_3 <= 16'b0;
-//        end else begin
-//            product_var_reg <= product_var;
-//            delayed_mean_3 <= delayed_mean_2;
-//        end
-//    end
+    always @(posedge clk) begin
+        if (reset) begin
+            product_var_reg <= 16'b0;
+            delayed_mean_3 <= 16'b0;
+        end else begin
+            product_var_reg <= product_var;
+            delayed_mean_3 <= delayed_mean_2ke3;
+        end
+    end
 
     // Instantiate Adder (delayed_mean + product)
     fixed_point_add add (
-//        .A(delayed_mean_3),
-//        .B(product_var_reg),
-        .A(delayed_mean_2),
-        .B(product_var),
+        .A(delayed_mean_3),
+        .B(product_var_reg),
+//        .A(delayed_mean_2),
+//        .B(product_var),
         .C(lambda_result)
     );
+    
+    reg [15:0] output_reg;
+    
+    always @(posedge clk) begin
+        if (reset) begin
+            output_reg <= 16'b0;
+        end else begin
+            output_reg <= lambda_result;
+        end
+    end
 
     // Assign final output
-    assign lambda_out = lambda_result;
+    assign lambda_out = output_reg;
 
 endmodule
