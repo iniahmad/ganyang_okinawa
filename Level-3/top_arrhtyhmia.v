@@ -8,9 +8,9 @@
 `include "enc_1.v"
 `include "enc_2.v"
 // lambda layer
-`include "lambda_layer.v"
-`include "delay3cc.v"
-`include "squareroot.v"
+`include "lambda_layer_v2.v"
+`include "delay3cc_v2.v"
+`include "squareroot_piped_v2.v"
 `include "PRNG.v"
 // Lanjut big layer
 `include "enc_3.v"
@@ -119,46 +119,44 @@ module top_arrhythmia #(parameter BITSIZE = 16) (
         16'b0000000110100100,
         16'b1000000000111110
         };
-
-
-           w_enc_2_mean = {
-            16'b0000011110111111,
-            16'b0000001100011010,
-            16'b1001000011001011,
-            16'b1000101000000101,
-            16'b0000011010000001,
-            16'b1000110010101100
-            };
-            b_enc_2_mean = {
-            16'b0000001000011110
-            };
-            w_enc_2_var = {
-            16'b1001001001011000,
-            16'b1001101010110101,
-            16'b1001000000011100,
-            16'b1001101001100110,
-            16'b1001001110000011,
-            16'b1001001001111010
-            };
-            b_enc_2_var = {
-            16'b1001010110101110
-            };
-            w_enc_3 = {
-            16'b1000010110100100,
-            16'b0101010011011001,
-            16'b1000100111100110,
-            16'b1000100110011101,
-            16'b1000100011001110,
-            16'b0101101010001000
-            };
-            b_enc_3 = {
-            16'b0000000010100000,
-            16'b0000001110101100,
-            16'b1000000001110110,
-            16'b1000001000010001,
-            16'b0000001101011000,
-            16'b0000010011111101
-            };
+        w_enc_2_mean = {
+        16'b0000011110111111,
+        16'b0000001100011010,
+        16'b1001000011001011,
+        16'b1000101000000101,
+        16'b0000011010000001,
+        16'b1000110010101100
+        };
+        b_enc_2_mean = {
+        16'b0000001000011110
+        };
+        w_enc_2_var = {
+        16'b1001001001011000,
+        16'b1001101010110101,
+        16'b1001000000011100,
+        16'b1001101001100110,
+        16'b1001001110000011,
+        16'b1001001001111010
+        };
+        b_enc_2_var = {
+        16'b1001010110101110
+        };
+        w_enc_3 = {
+        16'b1000010110100100,
+        16'b0101010011011001,
+        16'b1000100111100110,
+        16'b1000100110011101,
+        16'b1000100011001110,
+        16'b0101101010001000
+        };
+        b_enc_3 = {
+        16'b0000000010100000,
+        16'b0000001110101100,
+        16'b1000000001110110,
+        16'b1000001000010001,
+        16'b0000001101011000,
+        16'b0000010011111101
+        };
     end
 
     // First layer
@@ -215,7 +213,7 @@ module top_arrhythmia #(parameter BITSIZE = 16) (
     // LAMBDA layer
     wire [BITSIZE*1-1:0] lambda_out;
 
-    lambda_layer
+    lambda_layer_v2
     lambda (
     .clk(clk),
     .reset(reset),
@@ -251,6 +249,31 @@ module top_arrhythmia #(parameter BITSIZE = 16) (
     endgenerate
 
     // enc_4
-    
+    wire [BITSIZE*2-1:0] enc_4_out;
+
+    enc_4 #(.BITSIZE(BITSIZE))
+    classifier_output (
+        .clk(clk),
+        .reset(reset),
+        .x(softplus_enc_3_out),
+        .w(w_enc_4),
+        .b(b_enc_4),
+        .y(enc_4_out)
+    );
+
+    wire [BITSIZE*2-1:0] sigmoid_enc_4_out;
+
+    generate
+        for (i = 0; i < 2; i = i + 1) begin : sigmoid_layer_enc_4
+            sigmoid8_piped sigmoid_enc_4 (
+                .clk(clk),
+                .reset(reset),
+                .data_in(enc_4_out[BITSIZE*i +: BITSIZE]),
+                .data_out(sigmoid_enc_4_out[BITSIZE*i +: BITSIZE])
+            );
+        end
+    endgenerate
+
+    assign y = sigmoid_enc_4_out;
 
 endmodule
