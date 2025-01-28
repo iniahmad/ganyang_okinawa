@@ -29,6 +29,49 @@ module top_arrhythmia_tb;
         .done_flag_out(done_flag)
     );
 
+    terus bagian inisialisasi:
+
+/// for output ///
+    localparam max_data = 25;
+    integer i;
+    integer sum;
+    integer true;
+    logic pred  [max_data-1:0];
+    logic reall [max_data-1:0];
+
+    function logic compare_sign_mag;
+        input [15:0] val_a;
+        input [15:0] val_b;  // Declare inputs as 16-bit
+        logic sign_a;
+        logic sign_b;
+        logic [14:0] mag_a;
+        logic [14:0] mag_b;
+
+        begin
+            // Extract sign and magnitude
+            sign_a = val_a[15];
+            sign_b = val_b[15];
+            mag_a = val_a[14:0];
+            mag_b = val_b[14:0];
+
+            // Compare based on sign and magnitude
+            if (sign_a != sign_b) begin
+                // If signs differ, the negative number is smaller
+                compare_sign_mag = (sign_a < sign_b);  // 1 if A > B
+            end else begin
+                // If signs are the same, compare magnitudes
+                if (sign_a == 1'b1) begin
+                    // Both negative: larger magnitude means smaller number
+                    compare_sign_mag = (mag_a < mag_b);  // 1 if (-)A > (-)B
+                end else begin
+                    // Both positive: larger magnitude means larger number
+                    compare_sign_mag = (mag_a > mag_b);  // 1 if A > B
+                end
+            end
+        end
+    endfunction
+/// for output ///
+
     // Clock generation
     initial begin
         clk = 0;
@@ -505,6 +548,22 @@ true_label = 1;
     // Wait for global reset to finish
     #10;
     reset = 0;
+
+    for (i = 0; i < max_data; i = i + 1) begin
+            if (!(reall[i] === 1'bx || pred[i] === 1'bx)) begin
+                $display("testcase: %d, real: %b, pred: %b", i, reall[i], pred[i]);
+                sum = sum + 1;
+                if (reall[i] == pred[i]) begin
+                    true = true + 1;
+                end
+            end
+        end
+
+        if (sum > 0) begin
+            $display("accuracy = (%d / %d) = %4f", true, sum, true * 1.0 / sum);
+        end else begin
+            $display("No valid test cases to calculate accuracy.");
+        end
     
 
     
