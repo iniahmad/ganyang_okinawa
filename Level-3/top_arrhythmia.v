@@ -27,7 +27,8 @@ module top_arrhythmia #(parameter BITSIZE = 16) (
     input wire  clk,
     input wire  reset,
     input wire  [BITSIZE*10-1:0]   x,  // Input vector (10 elements)    
-    output wire [BITSIZE*2-1:0]    y   // Output vector (2 elements)
+    output wire [BITSIZE*2-1:0]    y,   // Output vector (2 elements)
+    output wire done_flag_out
 );
     // First Layer
     reg signed[BITSIZE*10*6-1:0] w_enc_1;
@@ -177,13 +178,32 @@ module top_arrhythmia #(parameter BITSIZE = 16) (
         };
     end
 
+    // Controller
+    wire  enc1_start;
+    wire  enc2_start;
+    wire  enc3_start;
+    wire  enc4_start;
+    wire  done_flag;
+    assign done_flag_out = done_flag;
+
+    enc_control enc_control_1(
+    .clk(clk),
+    .reset(reset),
+    .debug_cc(),
+    .enc1_start(enc1_start),
+    .enc2_start(enc2_start),
+    .enc3_start(enc3_start),
+    .enc4_start(enc4_start),
+    .done_flag(done_flag)
+    );
+
     // First layer
     wire [BITSIZE*6-1:0] enc_1_out;
 
     enc_1 #(.BITSIZE(BITSIZE)) 
     intermediate_layer(
         .clk(clk),
-        .reset(reset),
+        .reset(enc1_start),
         .x(x),
         .w(w_enc_1),
         .b(b_enc_1),
@@ -211,7 +231,7 @@ module top_arrhythmia #(parameter BITSIZE = 16) (
     enc_2 #(.BITSIZE(BITSIZE)) 
     mean (
         .clk(clk),
-        .reset(reset),
+        .reset(enc2_start),
         .x(softplus_enc_1_out),
         .w(w_enc_2_mean),
         .b(b_enc_2_mean),
@@ -221,7 +241,7 @@ module top_arrhythmia #(parameter BITSIZE = 16) (
     enc_2 #(.BITSIZE(BITSIZE)) 
     var (
         .clk(clk),
-        .reset(reset),
+        .reset(enc2_start),
         .x(softplus_enc_1_out),
         .w(w_enc_2_var),
         .b(b_enc_2_var),
@@ -246,7 +266,7 @@ module top_arrhythmia #(parameter BITSIZE = 16) (
     enc_3 #(.BITSIZE(BITSIZE))
     hidden_classifier(
         .clk(clk),
-        .reset(reset),
+        .reset(enc3_start),
         .x(lambda_out),
         .w(w_enc_3),
         .b(b_enc_3),
@@ -272,7 +292,7 @@ module top_arrhythmia #(parameter BITSIZE = 16) (
     enc_4 #(.BITSIZE(BITSIZE))
     classifier_output (
         .clk(clk),
-        .reset(reset),
+        .reset(enc4_start),
         .x(softplus_enc_3_out),
         .w(w_enc_4),
         .b(b_enc_4),
