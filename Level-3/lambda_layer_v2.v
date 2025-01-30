@@ -69,7 +69,7 @@ module lambda_layer_v2 (
         end else begin
             prng_out_reg <= prng_out;
             sigma_sqrt_reg <= sigma_sqrt;
-            delayed_mean_2ke3 <= 16'b0;        
+            delayed_mean_2ke3 <= delayed_mean_2;        
         end
     end
 
