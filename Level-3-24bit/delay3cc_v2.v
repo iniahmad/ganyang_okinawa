@@ -1,4 +1,4 @@
-module delay_3_cycle_v2 #(parameter BITSIZE = 20) (
+module delay_3_cycle_v2 #(parameter BITSIZE = 24) (
     input  wire clk,                     // Clock signal
     input  wire [BITSIZE-1:0] in_data,   // Input data (parameterized bit-width)
     output reg  [BITSIZE-1:0] out_data   // Output data (parameterized bit-width)

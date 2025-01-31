@@ -1,7 +1,7 @@
 // `include "fixed_point_add.v"
 // `include "fixed_point_multiply.v"
 
-module enc_2 #(parameter BITSIZE = 20) (
+module enc_2 #(parameter BITSIZE = 24) (
     input wire  clk,
     input wire  reset,
     input wire  [BITSIZE*6-1:0]   x,  // Input vector (6 elements)

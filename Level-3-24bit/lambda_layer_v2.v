@@ -1,4 +1,4 @@
-module lambda_layer_v2 #(parameter BITSIZE = 20) (
+module lambda_layer_v2 #(parameter BITSIZE = 24) (
     input  wire clk,                                   // Clock signal
     input  wire reset,                                 // Reset signal
     input  wire [BITSIZE-1:0] mean,                    // Mean (parameterized bit-width)
