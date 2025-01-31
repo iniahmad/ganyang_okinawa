@@ -14,7 +14,7 @@ def float_to_custom_binary(float_value):
 
     # Convert the fractional part to binary (27 bits)
     fractional_binary = ''
-    for _ in range(11):
+    for _ in range(15):
         fractional_part *= 2
         bit = int(fractional_part)
         fractional_binary += str(bit)
