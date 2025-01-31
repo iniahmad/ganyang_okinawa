@@ -11,3 +11,9 @@ def binary_to_float(binary_str):
     if sign == 1:
         float_value = -float_value
     return float_value
+
+# Input from the user
+user_input = input("Please enter a binary value: ")
+
+float_data = binary_to_float(user_input)
+print(f"Custom binary representation: {float_data:.10f}")
