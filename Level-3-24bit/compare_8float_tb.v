@@ -2,7 +2,7 @@
 
 module compare_8float_tb;
 
-parameter BITSIZE = 20;
+parameter BITSIZE = 24;
 
 reg clk;
 reg reset;
@@ -36,14 +36,14 @@ reg signed [BITSIZE-1:0] c8 = 8;
 reg signed [BITSIZE-1:0] m9 = 9;
 reg signed [BITSIZE-1:0] c9 = 9;
 
-reg signed [BITSIZE-1:0] x1 = 20'b1_0100_000000000000000;
-reg signed [BITSIZE-1:0] x2 = 20'b1_0011_000000000000000;
-reg signed [BITSIZE-1:0] x3 = 20'b1_0010_000000000000000;
-reg signed [BITSIZE-1:0] x4 = 20'b1_0001_000000000000000;
-reg signed [BITSIZE-1:0] x5 = 20'b0_0001_000000000000000;
-reg signed [BITSIZE-1:0] x6 = 20'b0_0010_000000000000000;
-reg signed [BITSIZE-1:0] x7 = 20'b0_0011_000000000000000;
-reg signed [BITSIZE-1:0] x8 = 20'b0_0100_000000000000000;
+reg signed [BITSIZE-1:0] x1 = 24'b1_0000_0100_000000000000000;
+reg signed [BITSIZE-1:0] x2 = 24'b1_0000_0011_000000000000000;
+reg signed [BITSIZE-1:0] x3 = 24'b1_0000_0010_000000000000000;
+reg signed [BITSIZE-1:0] x4 = 24'b1_0000_0001_000000000000000;
+reg signed [BITSIZE-1:0] x5 = 24'b0_0000_0001_000000000000000;
+reg signed [BITSIZE-1:0] x6 = 24'b0_0000_0010_000000000000000;
+reg signed [BITSIZE-1:0] x7 = 24'b0_0000_0011_000000000000000;
+reg signed [BITSIZE-1:0] x8 = 24'b0_0000_0100_000000000000000;
 
 wire signed [BITSIZE-1:0] m_out;
 wire signed [BITSIZE-1:0] c_out;
@@ -79,7 +79,7 @@ compare_8float #(BITSIZE) custom_mux (
 
 initial begin
     // Test case: input a signed number
-    data_in = 20'b0_0100_100000000000000; // should be region 9
+    data_in = 24'b0_0100_100000000000000; // should be region 9
 
     clk = 0;
     reset = 0;

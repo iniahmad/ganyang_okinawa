@@ -1,4 +1,4 @@
-module compare_8float #(parameter BITSIZE = 20) (
+module compare_8float #(parameter BITSIZE = 24) (
     input wire [BITSIZE-1:0] data, x1, x2, x3, x4, x5, x6, x7, x8, // Sign-magnitude inputs
     input wire [BITSIZE-1:0] m1, m2, m3, m4, m5, m6, m7, m8, m9,
     input wire [BITSIZE-1:0] c1, c2, c3, c4, c5, c6, c7, c8, c9,
