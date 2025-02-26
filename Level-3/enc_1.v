@@ -30,6 +30,7 @@ always @(posedge clk or posedge reset) begin
         in_add_reg[0]  <= 0; in_add_reg[1]  <= 0; in_add_reg[2]  <= 0; in_add_reg[3]  <= 0; in_add_reg[4]  <= 0; in_add_reg[5]  <= 0;
     end else begin
         if (!done) begin
+            // $display("j = %d, in mul 1 [3] = %b, in mul 2 [3] = %b, in add [3] = %b", j, in_mul_1[3], in_mul_2[3], out_mul[3]);
             out_mul_reg[0] <= out_mul[0];
             out_mul_reg[1] <= out_mul[1];
             out_mul_reg[2] <= out_mul[2];
@@ -55,7 +56,7 @@ always @(posedge clk or posedge reset) begin
     end
 
     // $display("time: %0t\t, clk: %b, reset: %b\t, j = %d, in_mul_1 = %h in_mul_2 = %h out_mul = %h, out_mul_reg = %h, in_add = %h out_add = %h output = %h",
-    //          $time, clk, reset, j, in_mul_1[0], in_mul_2[0], out_mul[0], out_mul_reg[0], in_add_reg[0], out_add[0], y[BITSIZE*0 +: BITSIZE]);
+    //          $time, clk, reset, j, in_mul_1[5], in_mul_2[5], out_mul[5], out_mul_reg[5], in_add_reg[5], out_add[5], y[BITSIZE*5 +: BITSIZE]);
 end
 
 
@@ -72,15 +73,15 @@ generate
                                 (j == 6) ? x[(BITSIZE*6) +: BITSIZE] :
                                 (j == 7) ? x[(BITSIZE*7) +: BITSIZE] :
                                 (j == 8) ? x[(BITSIZE*8) +: BITSIZE] : x[(BITSIZE*9) +: BITSIZE];
-        assign in_mul_2 [idx] = (j == 0) ? w[(BITSIZE*6*0) + (BITSIZE*idx) +: BITSIZE] :
-                                (j == 1) ? w[(BITSIZE*6*1) + (BITSIZE*idx) +: BITSIZE] :
-                                (j == 2) ? w[(BITSIZE*6*2) + (BITSIZE*idx) +: BITSIZE] :
-                                (j == 3) ? w[(BITSIZE*6*3) + (BITSIZE*idx) +: BITSIZE] :
-                                (j == 4) ? w[(BITSIZE*6*4) + (BITSIZE*idx) +: BITSIZE] :
-                                (j == 5) ? w[(BITSIZE*6*5) + (BITSIZE*idx) +: BITSIZE] :
-                                (j == 6) ? w[(BITSIZE*6*6) + (BITSIZE*idx) +: BITSIZE] :
-                                (j == 7) ? w[(BITSIZE*6*7) + (BITSIZE*idx) +: BITSIZE] :
-                                (j == 8) ? w[(BITSIZE*6*8) + (BITSIZE*idx) +: BITSIZE] : w[(BITSIZE*6*9) + (BITSIZE*idx) +: BITSIZE];
+        assign in_mul_2 [idx] = (j == 0) ? w[(BITSIZE*6*9) + (BITSIZE*idx) +: BITSIZE] :
+                                (j == 1) ? w[(BITSIZE*6*8) + (BITSIZE*idx) +: BITSIZE] :
+                                (j == 2) ? w[(BITSIZE*6*7) + (BITSIZE*idx) +: BITSIZE] :
+                                (j == 3) ? w[(BITSIZE*6*6) + (BITSIZE*idx) +: BITSIZE] :
+                                (j == 4) ? w[(BITSIZE*6*5) + (BITSIZE*idx) +: BITSIZE] :
+                                (j == 5) ? w[(BITSIZE*6*4) + (BITSIZE*idx) +: BITSIZE] :
+                                (j == 6) ? w[(BITSIZE*6*3) + (BITSIZE*idx) +: BITSIZE] :
+                                (j == 7) ? w[(BITSIZE*6*2) + (BITSIZE*idx) +: BITSIZE] :
+                                (j == 8) ? w[(BITSIZE*6*1) + (BITSIZE*idx) +: BITSIZE] : w[(BITSIZE*6*0) + (BITSIZE*idx) +: BITSIZE];
         
         fixed_point_multiply mul (
             .A(in_mul_1[idx]), // Take x[j]

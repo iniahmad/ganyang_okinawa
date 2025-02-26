@@ -59,11 +59,11 @@ generate
                                 (j == 2) ? x[(BITSIZE*2) +: BITSIZE] :
                                 (j == 3) ? x[(BITSIZE*3) +: BITSIZE] :
                                 (j == 4) ? x[(BITSIZE*4) +: BITSIZE] : x[(BITSIZE*5) +: BITSIZE];
-        assign in_mul_2 [idx] = (j == 0) ? w[(BITSIZE*2*0) + (BITSIZE*idx) +: BITSIZE] :
-                                (j == 1) ? w[(BITSIZE*2*1) + (BITSIZE*idx) +: BITSIZE] :
-                                (j == 2) ? w[(BITSIZE*2*2) + (BITSIZE*idx) +: BITSIZE] :
-                                (j == 3) ? w[(BITSIZE*2*3) + (BITSIZE*idx) +: BITSIZE] :
-                                (j == 4) ? w[(BITSIZE*2*4) + (BITSIZE*idx) +: BITSIZE] : w[(BITSIZE*2*5) + (BITSIZE*idx) +: BITSIZE];
+        assign in_mul_2 [idx] = (j == 0) ? w[(BITSIZE*2*5) + (BITSIZE*idx) +: BITSIZE] :
+                                (j == 1) ? w[(BITSIZE*2*4) + (BITSIZE*idx) +: BITSIZE] :
+                                (j == 2) ? w[(BITSIZE*2*3) + (BITSIZE*idx) +: BITSIZE] :
+                                (j == 3) ? w[(BITSIZE*2*2) + (BITSIZE*idx) +: BITSIZE] :
+                                (j == 4) ? w[(BITSIZE*2*1) + (BITSIZE*idx) +: BITSIZE] : w[(BITSIZE*2*0) + (BITSIZE*idx) +: BITSIZE];
                                 
         fixed_point_multiply mul (
             .A(in_mul_1[idx]),

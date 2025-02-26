@@ -6,7 +6,7 @@ module lambda_layer_v2 (
     input  wire clk,                                  // Clock signal
     input  wire reset,                                // Reset signal
     input  wire [15:0] mean,                          // Mean (16-bit input)
-    input  wire [15:0] var,                           // Variance (16-bit input)
+    input  wire [15:0] vare,                           // Variance (16-bit input)
     output wire [15:0] lambda_out                     // Final output (16-bit)
 );
 
@@ -36,7 +36,7 @@ module lambda_layer_v2 (
     softplus_8slice_piped_v2 softplus_lambda (
         .clk(clk),
         .reset(reset),
-        .data_in(var),
+        .data_in(vare),
         .data_out(softplus_var)
     );
 

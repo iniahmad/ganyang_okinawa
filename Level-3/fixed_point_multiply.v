@@ -1,4 +1,4 @@
-`timescale 1ns / 1ps
+// `timescale 1ns / 1ps
 
 module fixed_point_multiply #(parameter BITSIZE = 16, parameter FRAC = 11 ) (
     input  [BITSIZE-1:0] A,  // BITSIZE-bit fixed-point input (sign-magnitude)

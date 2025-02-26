@@ -66,6 +66,38 @@ module top_arrhythmia_tb;
             end
         end
     endfunction
+
+    function real b2f(input logic [15:0] binary_str);
+        logic sign;
+        logic [3:0] integer_part;
+        logic [10:0] fractional_part;
+        real frac_value;
+        real float_value;
+        int i;
+
+        // Extract sign, integer, and fractional parts
+        sign = binary_str[15];
+        integer_part = binary_str[14:11];
+        fractional_part = binary_str[10:0];
+
+        // Calculate fractional value
+        frac_value = 0.0;
+        for (i = 0; i < 11; i = i + 1) begin
+            if (fractional_part[i] == 1'b1) begin
+                frac_value = frac_value + (1.0 / (2 ** (i + 1)));
+            end
+        end
+
+        // Combine integer and fractional parts
+        float_value = integer_part + frac_value;
+
+        // Apply sign
+        if (sign == 1'b1) begin
+            float_value = -float_value;
+        end
+
+        return float_value;
+    endfunction
 /// for output ///
 
     // Clock generation
@@ -76,6 +108,39 @@ module top_arrhythmia_tb;
 
     // Test sequence
     initial begin
+
+    #600;
+    reset = 1;
+    x = 0;
+    // Wait for global reset to finish
+    #20;
+    reset = 0;
+
+    // Testcase 1 False
+    x = {
+    16'b0000010001110001,
+    16'b0000001110110100,
+    16'b0000001101001001,
+    16'b0000001101101011,
+    16'b0000001010101110,
+    16'b0000010010011011,
+    16'b0000001010100111,
+    16'b0000010000110000,
+    16'b0000001110011000,
+    16'b0000001101101011
+    };
+
+    reall[0] = 0;
+    pred[0] = compare_sign_mag(y1, y2);
+
+    // #600;
+    // reset = 1;
+    // x = 0;
+    // // Wait for global reset to finish
+    // #20;
+    // reset = 0;
+
+/*
         // $dumpfile("top_arrhythmia_tb.vcd");
         // $dumpvars(0, top_arrhythmia_tb);
         // Initialize Inputs
@@ -361,26 +426,28 @@ module top_arrhythmia_tb;
         // Wait for global reset to finish
         #10;
         reset = 0;
+*/
+
 
         // Initialize variables
-        sum = 0;
-        true = 0;
+        // sum = 0;
+        // true = 0;
 
-        for (i = 0; i < max_data; i = i + 1) begin
-            if (!(reall[i] === 1'bx || pred[i] === 1'bx)) begin
-                $display("testcase: %d, real: %b, pred: %b", i, reall[i], pred[i]);
-                sum = sum + 1;
-                if (reall[i] == pred[i]) begin
-                    true = true + 1;
-                end
-            end
-        end
+        // for (i = 0; i < max_data; i = i + 1) begin
+        //     if (!(reall[i] === 1'bx || pred[i] === 1'bx)) begin
+                $display("testcase: %d, real: %b, pred: %b ------ y1_out: %b, y2_out: %b, in float: %f, %f", 0, reall[0], pred[0], y1, y2, b2f(y1), b2f(y2));
+        //         sum = sum + 1;
+        //         if (reall[i] == pred[i]) begin
+        //             true = true + 1;
+        //         end
+        //     end
+        // end
 
-        if (sum > 0) begin
-            $display("accuracy = (%d / %d) = %.3f%%", true, sum, true * 100.0 / sum);
-        end else begin
-            $display("No valid test cases to calculate accuracy.");
-        end
+        // if (sum > 0) begin
+        //     $display("accuracy = (%d / %d) = %.3f%%", true, sum, true * 100.0 / sum);
+        // end else begin
+        //     $display("No valid test cases to calculate accuracy.");
+        // end
 
         // Finish simulation
         $finish;
