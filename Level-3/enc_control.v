@@ -4,6 +4,7 @@ module enc_control (
     output wire [5:0] debug_cc,
     output reg  enc1_start,
     output reg  enc2_start,
+    output reg  lambda_start,
     output reg  enc3_start,
     output reg  enc4_start,
     output reg  done_flag
@@ -50,6 +51,9 @@ module enc_control (
                     offset + enc1_cc + softplus1:
                         enc2_start <= 0;
 
+                    offset + enc1_cc + softplus1 + enc2_cc:
+                        lambda_start <= 0;
+
                     offset + enc1_cc + softplus1 + enc2_cc + softplus2 + lambda:
                         enc3_start <= 0;
 
@@ -60,11 +64,12 @@ module enc_control (
                         done_flag <= 1;
 
                     default: begin
-                        enc1_start <= enc1_start;
-                        enc2_start <= enc2_start;
-                        enc3_start <= enc3_start;
-                        enc4_start <= enc4_start;
-                        done_flag  <= done_flag;
+                        enc1_start   <= enc1_start;
+                        enc2_start   <= enc2_start;
+                        lambda_start <= lambda_start;
+                        enc3_start   <= enc3_start;
+                        enc4_start   <= enc4_start;
+                        done_flag    <= done_flag;
                     end
                 endcase
             end

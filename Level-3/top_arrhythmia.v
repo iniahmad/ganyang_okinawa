@@ -579,6 +579,7 @@ b_enc_4 = {
     // Controller
     wire  enc1_start;
     wire  enc2_start;
+    wire  lambda_start;
     wire  enc3_start;
     wire  enc4_start;
     wire  done_flag;
@@ -590,6 +591,7 @@ b_enc_4 = {
     .debug_cc(),
     .enc1_start(enc1_start),
     .enc2_start(enc2_start),
+    .lambda_start(lambda_start),
     .enc3_start(enc3_start),
     .enc4_start(enc4_start),
     .done_flag(done_flag)
@@ -676,7 +678,7 @@ b_enc_4 = {
     lambda_layer_v2
     lambda (
     .clk(clk),
-    .reset(reset),
+    .reset(lambda_start),
     .mean(enc_2_mean_out),
     .vare(enc_2_var_out),
     .lambda_out(lambda_out)
