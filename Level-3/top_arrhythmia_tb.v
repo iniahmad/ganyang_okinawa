@@ -140,7 +140,7 @@ module top_arrhythmia_tb;
     // #20;
     // reset = 0;
 
-/*
+
         // $dumpfile("top_arrhythmia_tb.vcd");
         // $dumpvars(0, top_arrhythmia_tb);
         // Initialize Inputs
@@ -426,7 +426,7 @@ module top_arrhythmia_tb;
         // Wait for global reset to finish
         #10;
         reset = 0;
-*/
+
 
 
         // Initialize variables
@@ -435,7 +435,7 @@ module top_arrhythmia_tb;
 
         // for (i = 0; i < max_data; i = i + 1) begin
         //     if (!(reall[i] === 1'bx || pred[i] === 1'bx)) begin
-                $display("testcase: %d, real: %b, pred: %b ------ y1_out: %b, y2_out: %b, in float: %f, %f", 0, reall[0], pred[0], y1, y2, b2f(y1), b2f(y2));
+                // $display("testcase: %d, real: %b, pred: %b ------ y1_out: %b, y2_out: %b, in float: %f, %f", 0, reall[0], pred[0], y1, y2, b2f(y1), b2f(y2));
         //         sum = sum + 1;
         //         if (reall[i] == pred[i]) begin
         //             true = true + 1;
