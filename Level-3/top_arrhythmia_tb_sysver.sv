@@ -75,7 +75,7 @@ module top_arrhythmia_tb;
             // Compare based on sign and magnitude
             if (sign_a != sign_b) begin
                 // If signs differ, the negative number is smaller
-                compare_sign_mag = (sign_a < sign_b);  // 1 if A > B
+                compare_sign_mag = (sign_a > sign_b);  // 1 if A > B
             end else begin
                 // If signs are the same, compare magnitudes
                 if (sign_a == 1'b1) begin
