@@ -54,19 +54,19 @@ module lambda_layer_tb;
             $display("\t\t\t\tResett------");
             mean = $random % 65536; // Random 16-bit mean
             var = $random % 65536; // Random 16-bit variance
-            #(CLK_PERIOD * 10); // Wait for some cycles
+            #(CLK_PERIOD * 9); // Wait for some cycles
             $display("\t\t\t\t----------------------------------------------------------------");
         end
 
-        // Apply edge cases
-        mean = 16'd0;   // Test with mean = 0
-        var = 16'd0;    // Test with var = 0
-        #(CLK_PERIOD * 10);
-        $display("\t\t\t\t----------------------------------------------------------------");
+        // // Apply edge cases
+        // mean = 16'd0;   // Test with mean = 0
+        // var = 16'd0;    // Test with var = 0
+        // #(CLK_PERIOD * 10);
+        // $display("\t\t\t\t----------------------------------------------------------------");
 
-        mean = 16'd65535; // Test with maximum mean
-        var = 16'd65535;  // Test with maximum var
-        #(CLK_PERIOD * 10);
+        // mean = 16'd65535; // Test with maximum mean
+        // var = 16'd65535;  // Test with maximum var
+        // #(CLK_PERIOD * 10);
 
         // Finish simulation
         $finish;

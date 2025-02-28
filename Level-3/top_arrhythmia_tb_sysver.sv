@@ -58,8 +58,8 @@ module top_arrhythmia_tb;
     logic reall [max_data-1:0];
 
     function logic compare_sign_mag;
-        input [15:0] val_a;
-        input [15:0] val_b;  // Declare inputs as 16-bit
+        input logic [15:0] val_a;
+        input logic [15:0] val_b;  // Declare inputs as 16-bit
         logic sign_a;
         logic sign_b;
         logic [14:0] mag_a;
@@ -185,18 +185,18 @@ module top_arrhythmia_tb;
     // reset = 0;
 
      // Test case index 0 True (y1 > y2)
-x = {
-16'b0000000101111101,
-16'b0000001000011011,
-16'b0000000111011001,
-16'b0000000111000100,
-16'b0000000110100001,
-16'b0000001010100000,
-16'b0000000110011110,
-16'b0000001000011011,
-16'b0000000111010000,
-16'b0000000110010100
-};
+// x = {
+// 16'b0000000101111101,
+// 16'b0000001000011011,
+// 16'b0000000111011001,
+// 16'b0000000111000100,
+// 16'b0000000110100001,
+// 16'b0000001010100000,
+// 16'b0000000110011110,
+// 16'b0000001000011011,
+// 16'b0000000111010000,
+// 16'b0000000110010100
+// };
 
 /*
         // $dumpfile("top_arrhythmia_tb.vcd");
@@ -486,7 +486,7 @@ x = {
         reset = 0;
 */
 
-/*
+
 // Testcase 0 True
 test_index = 16'd0;
 x = {
@@ -1712,37 +1712,38 @@ x = 0;
 reset = 0;
 
 
-*/
 
-        // // Initialize variables
-        // sum = 0;
-        // true = 0;
 
-        // for (i = 0; i < max_data; i = i + 1) begin
-        //     if (!(reall[i] === 1'bx || pred[i] === 1'bx)) begin
-        //         $display("testcase: %d, real: %b, pred: %b", i, reall[i], pred[i]);
-        //         sum = sum + 1;
-        //         if (reall[i] == pred[i]) begin
-        //             true = true + 1;
-        //         end
-        //     end
-        // end
+        // Initialize variables
+        sum = 0;
+        true = 0;
 
-        // if (sum > 0) begin
-        //     $display("accuracy = (%d / %d) = %.3f%%", true, sum, true * 100.0 / sum);
-        // end else begin
-        //     $display("No valid test cases to calculate accuracy.");
-        // end
-        #600;
-        $display("testcase: %d, real: %b, pred: %b ------ y1_out: %b, y2_out: %b, in float: %f, %f", 0, reall[0], pred[0], y1, y2, b2f(y1), b2f(y2));
-        $display("output per layer:");
-        $display("  layer input         : %f, %f, %f, %f, %f, %f, %f, %f, %f, %f", b2f(x[159:144]), b2f(x[143:128]), b2f(x[127:112]), b2f(x[111:96]), b2f(x[95:80]), b2f(x[79:64]), b2f(x[63:48]), b2f(x[47:32]), b2f(x[31:16]), b2f(x[15:0]));
-        $display("  layer intermediate  : %f, %f, %f, %f, %f, %f", b2f(out_intermediate[5]), b2f(out_intermediate[4]), b2f(out_intermediate[3]), b2f(out_intermediate[2]), b2f(out_intermediate[1]), b2f(out_intermediate[0]));
-        $display("  layer zmean         : %f, %b", b2f(out_zmean), out_zmean);
-        $display("  layer zvar          : %f, %b", b2f(out_zvar), out_zvar);
-        $display("  layer sampling      : %f, %b", b2f(out_sampling), out_sampling);
-        $display("  layer hidden class  : %f, %f, %f, %f, %f, %f", b2f(out_hidden_classifier[5]), b2f(out_hidden_classifier[4]), b2f(out_hidden_classifier[3]), b2f(out_hidden_classifier[2]), b2f(out_hidden_classifier[1]), b2f(out_hidden_classifier[0]));
-        $display("  layer output        : %f, %f", b2f(y1), b2f(y2));
+        for (i = 0; i < max_data; i = i + 1) begin
+            if (!(reall[i] === 1'bx || pred[i] === 1'bx)) begin
+                $display("testcase: %d, real: %b, pred: %b", i, reall[i], pred[i]);
+                sum = sum + 1;
+                if (reall[i] == pred[i]) begin
+                    true = true + 1;
+                end
+            end
+        end
+
+        if (sum > 0) begin
+            $display("accuracy = (%d / %d) = %.3f%%", true, sum, true * 100.0 / sum);
+        end else begin
+            $display("No valid test cases to calculate accuracy.");
+        end
+        // #600;
+        // $display("testcase: %d, real: %b, pred: %b ------ y1_out: %b, y2_out: %b, in float: %f, %f", 0, reall[0], pred[0], y1, y2, b2f(y1), b2f(y2));
+        // $display("output per layer:");
+        // $display("  layer input         : %f, %f, %f, %f, %f, %f, %f, %f, %f, %f", b2f(x[159:144]), b2f(x[143:128]), b2f(x[127:112]), b2f(x[111:96]), b2f(x[95:80]), b2f(x[79:64]), b2f(x[63:48]), b2f(x[47:32]), b2f(x[31:16]), b2f(x[15:0]));
+        // $display("  layer intermediate  : %f, %f, %f, %f, %f, %f", b2f(out_intermediate[5]), b2f(out_intermediate[4]), b2f(out_intermediate[3]), b2f(out_intermediate[2]), b2f(out_intermediate[1]), b2f(out_intermediate[0]));
+        // $display("  layer zmean         : %f, %b", b2f(out_zmean), out_zmean);
+        // $display("  layer zvar          : %f, %b", b2f(out_zvar), out_zvar);
+        // $display("  layer sampling      : %f, %b", b2f(out_sampling), out_sampling);
+        // $display("  layer hidden class  : %f, %f, %f, %f, %f, %f", b2f(out_hidden_classifier[5]), b2f(out_hidden_classifier[4]), b2f(out_hidden_classifier[3]), b2f(out_hidden_classifier[2]), b2f(out_hidden_classifier[1]), b2f(out_hidden_classifier[0]));
+        // // $display("  layer output        : %f, %f", b2f(y1), b2f(y2));
+        // $display("  layer output        : %b, %b", y1, y2);
         
 
 

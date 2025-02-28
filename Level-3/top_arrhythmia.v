@@ -726,7 +726,13 @@ b_enc_4 = {
      if (reset) begin
          softplus_enc_3_out_reg <= {BITSIZE*6{1'b0}};  // Reset the register to zero
      end else begin
-         softplus_enc_3_out_reg <= softplus_enc_3_out;  // Reset the register to zero
+        //  softplus_enc_3_out_reg <= softplus_enc_3_out;  // Reset the register to zero
+         softplus_enc_3_out_reg [BITSIZE*0 +: BITSIZE] <= softplus_enc_3_out [BITSIZE*5 +: BITSIZE];
+         softplus_enc_3_out_reg [BITSIZE*1 +: BITSIZE] <= softplus_enc_3_out [BITSIZE*4 +: BITSIZE];
+         softplus_enc_3_out_reg [BITSIZE*2 +: BITSIZE] <= softplus_enc_3_out [BITSIZE*3 +: BITSIZE];
+         softplus_enc_3_out_reg [BITSIZE*3 +: BITSIZE] <= softplus_enc_3_out [BITSIZE*2 +: BITSIZE];
+         softplus_enc_3_out_reg [BITSIZE*4 +: BITSIZE] <= softplus_enc_3_out [BITSIZE*1 +: BITSIZE];
+         softplus_enc_3_out_reg [BITSIZE*5 +: BITSIZE] <= softplus_enc_3_out [BITSIZE*0 +: BITSIZE];
      end
     end
 
@@ -742,6 +748,9 @@ b_enc_4 = {
         .b(b_enc_4),
         .y(enc_4_out)
     );
+    wire [BITSIZE*2-1:0] enc_4_out_reverse; 
+    assign enc_4_out_reverse[BITSIZE*0 +: BITSIZE] = enc_4_out[BITSIZE*1 +: BITSIZE];
+    assign enc_4_out_reverse[BITSIZE*1 +: BITSIZE] = enc_4_out[BITSIZE*0 +: BITSIZE];
 
     wire [BITSIZE*2-1:0] sigmoid_enc_4_out;
 
@@ -756,6 +765,6 @@ b_enc_4 = {
         end
     endgenerate
 
-    assign y = sigmoid_enc_4_out;
+    assign y = enc_4_out_reverse;
 
 endmodule

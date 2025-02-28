@@ -1,6 +1,7 @@
 // `include "delay3cc_v2.v"
-// `include "squareroot.v"
+// `include "squareroot_piped_v2.v"
 // `include "PRNG.v"
+// `include "softplus_8slice_piped_v2.v"
 
 module lambda_layer_v2 (
     input  wire clk,                                  // Clock signal

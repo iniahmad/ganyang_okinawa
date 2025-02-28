@@ -1,6 +1,6 @@
 // `include "fixed_point_add.v"
 // `include "fixed_point_multiply.v"
-// `include "compare_8float.v"
+// `include "compare_8float_v2.v"
 
 module softplus_8slice_piped_v2
 #(parameter BITSIZE = 16)
@@ -11,7 +11,7 @@ module softplus_8slice_piped_v2
     output wire [15:0] data_out
 );
 
-    reg [15:0] m1 = 16'b0000000000001010;
+    reg [15:0] m1 = 16'b0000000000000001;
     reg [15:0] m2 = 16'b0000000001100011;
     reg [15:0] m3 = 16'b0000000100111000;
     reg [15:0] m4 = 16'b0000001001111110;
@@ -21,7 +21,7 @@ module softplus_8slice_piped_v2
     reg [15:0] m8 = 16'b0000000110101001;
     reg [15:0] m9 = 16'b0000011111110101;
 
-    reg [15:0] c1 = 16'b0000000001010000;
+    reg [15:0] c1 = 16'b0000000000011000;
     reg [15:0] c2 = 16'b0000000110101010;
     reg [15:0] c3 = 16'b0000001110001111;
     reg [15:0] c4 = 16'b0000010100011100;
